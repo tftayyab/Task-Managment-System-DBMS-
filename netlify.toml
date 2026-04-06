@@ -1,10 +1,10 @@
-# Netlify build from repository root (frontend in `client/`).
-# Fixes “blank page / no CSS after reload” on routes like /dashboard when the server
-# must return index.html for client-side routing.
+# Matches Netlify UI: Base directory = client, build = npm run build, output = client/dist.
+# SPA fallback fixes missing CSS/JS after reload on client routes (e.g. /dashboard).
 
 [build]
-  command = "cd client && npm ci && npm run build"
-  publish = "client/dist"
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
