@@ -17,6 +17,8 @@ function Register() {
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
+    termsAccepted: false,
   });
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -77,7 +79,13 @@ function Register() {
           }}
         />
 
-        <div className="relative z-10 h-full flex justify-center sm:justify-end items-start pt-[5vh] pr-0 sm:pr-[8vw]">
+        <form
+          className="relative z-10 h-full flex justify-center sm:justify-end items-start pt-[5vh] pr-0 sm:pr-[8vw]"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRegister();
+          }}
+        >
           <div className="w-full sm:w-[420px] flex flex-col items-center sm:items-start">
 
             <h1 className="text-slate-800 dark:text-white mt-8 sm:mt-1 font-montserrat text-3xl sm:text-4xl font-bold leading-tight text-center sm:text-left ml-3">
@@ -165,9 +173,9 @@ function Register() {
             {/* Submit */}
             <div className="mt-2 sm:mt-4 px-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
               <button
+                type="submit"
                 className="text-white bg-indigo-500 text-sm sm:text-base font-semibold px-6 py-3 sm:px-10 sm:py-4 rounded-xl 
                            transition-all duration-300 ease-in-out hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/25 active:scale-95"
-                onClick={handleRegister}
                 disabled={loading}
               >
                 {loading ? 'Registering...' : 'Register'}
@@ -185,7 +193,7 @@ function Register() {
             </div>
 
           </div>
-        </div>
+        </form>
       </div>
     </PageWrapper>
   );

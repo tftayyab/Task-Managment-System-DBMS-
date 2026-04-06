@@ -8,11 +8,7 @@ import ShareTasks from './ShareTasks';
 import { motion } from 'framer-motion';
 
 function ViewTasks() {
-  const {
-    searchTerm,
-    setSearchTerm,
-    setNotification,
-  } = useOutletContext();
+  const { setNotification } = useOutletContext();
 
   const { id } = useParams();
   const [tasks, setTasks] = useState([]);
@@ -78,21 +74,21 @@ function ViewTasks() {
 
   return (
     <motion.div
-      className="min-h-screen sm:h-[calc(100vh-4.5rem)] bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col overflow-auto sm:overflow-hidden p-4 sm:p-6"
+      className="min-h-0 flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     >
       <motion.div
-        className="w-full max-w-7xl mx-auto flex-1"
-        initial={{ y: 10, opacity: 0 }}
+        className="w-full max-w-7xl mx-auto flex-1 min-h-0 flex flex-col"
+        initial={{ y: 6, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-4 sm:p-6 h-full flex flex-col sm:flex-row sm:gap-6 transition-all duration-300">
-          <div className="w-full flex flex-col gap-6">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col transition-all duration-300">
+          <div className="w-full flex flex-col flex-1 min-h-0 gap-4">
             {selectedTaskId && (
-              <div className="min-h-[31rem] sm:h-[31rem] sm:min-h-0 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-y-auto scrollbar-hide">
+              <div className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900/50 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
                 <Tasks
                   tasks={tasks}
                   task_id={selectedTaskId}

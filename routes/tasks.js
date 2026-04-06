@@ -19,11 +19,12 @@ router.post(
     const io = getIO();
 
     let shareWith = [];
+    let teamsForNotify = [];
 
     if (teamIds.length > 0) {
       const numericIds = teamIds.map((id) => Number(id)).filter((n) => !Number.isNaN(n));
-      const teams = await teamRepo.getTeamsByIds(numericIds);
-      const members = teams.flatMap((team) => team.shareWith || []);
+      teamsForNotify = await teamRepo.getTeamsByIds(numericIds);
+      const members = teamsForNotify.flatMap((team) => team.shareWith || []);
       shareWith = [...new Set(members)].filter((username) => username !== owner);
     }
 
@@ -34,15 +35,18 @@ router.post(
       shareWith
     );
 
-    teamIds.forEach((teamId) => {
-      io.to(String(teamId)).emit('task_created', {
-        message: `New task "${task.title}" added to your team`,
-        teamId,
+    for (const team of teamsForNotify) {
+      io.to(String(team._id)).emit('task_created', {
+        message:
+          team.owner === owner
+            ? `New task "${task.title}" in ${team.teamName}`
+            : `${owner} added "${task.title}" to ${team.teamName}`,
+        teamId: team._id,
       });
-    });
+    }
 
     shareWith.forEach((username) => {
-      io.to(username).emit('task_created', {
+      io.to(String(username)).emit('task_created', {
         message: `A new task "${task.title}" was shared with you`,
         teamId: teamIds[0],
       });

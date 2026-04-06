@@ -65,7 +65,7 @@ function Login() {
       const sharedRes = await axios.get(`${import.meta.env.VITE_API_URL}/tasks/shared`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const teamIds = sharedRes.data.teams.map(team => team._id);
+      const teamIds = (sharedRes.data.teams || []).map((team) => String(team._id));
       socket.emit('join_teams', teamIds);
 
       navigate('/dashboard');
@@ -100,7 +100,13 @@ function Login() {
           style={{ width: '50vw', height: '50vw', top: '40vh', left: '50vw' }}
         />
 
-        <div className="relative z-10 flex flex-col h-full px-4 sm:px-8 justify-start pt-[20vh]">
+        <form
+          className="relative z-10 flex flex-col h-full px-4 sm:px-8 justify-start pt-[20vh]"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <h1 className="text-slate-800 dark:text-white sm:ml-4.5 font-montserrat text-3xl sm:text-4xl font-bold text-center sm:text-left">
             Sign In
           </h1>
@@ -112,6 +118,7 @@ function Login() {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
+                autoComplete="username"
                 placeholder="Enter Username"
                 className="RegisterInput"
               />
@@ -129,6 +136,7 @@ function Login() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="current-password"
                 placeholder="Enter Password"
                 className="RegisterInput"
               />
@@ -166,7 +174,7 @@ function Login() {
 
           <div className="mt-6 px-4">
             <button
-              onClick={handleLogin}
+              type="submit"
               className="text-white bg-indigo-500 text-base w-full sm:w-60 h-14 font-semibold rounded-xl
                          transition-all duration-300 ease-in-out hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/25 active:scale-95"
             >
@@ -185,7 +193,7 @@ function Login() {
               </span>
             </p>
           </div>
-        </div>
+        </form>
       </div>
     </PageWrapper>
   );

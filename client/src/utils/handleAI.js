@@ -1,7 +1,6 @@
-// utils/handleAI.js
 import { enhanceTextWithAI } from './aiEnhancer';
 
-export const animateTyping = (text, field, setNewTask) => {
+export const animateTyping = (text, field, setNewTask, stepMs = 12) => {
   let i = 0;
   const textRef = { current: '' };
 
@@ -17,7 +16,7 @@ export const animateTyping = (text, field, setNewTask) => {
     }));
 
     if (i >= text.length) clearInterval(interval);
-  }, 25);
+  }, stepMs);
 };
 
 export const handleEnhanceField = async ({
@@ -55,7 +54,11 @@ export const handleEnhanceField = async ({
     const improved = field === 'title' ? result?.enhancedTitle : result?.enhancedDescription;
 
     if (improved && typeof improved === 'string') {
-      animateTyping(improved, field, setNewTask);
+      if (field === 'description' && improved.length > 800) {
+        setNewTask((prev) => ({ ...prev, [field]: improved }));
+      } else {
+        animateTyping(improved, field, setNewTask, field === 'description' ? 8 : 12);
+      }
       setShowReload((prev) => ({ ...prev, [field]: true }));
       if (setNotification) {
         setNotification(`${field === 'title' ? 'Title' : 'Description'} enhanced with AI`);

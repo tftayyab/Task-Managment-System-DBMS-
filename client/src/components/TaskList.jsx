@@ -102,17 +102,17 @@ function TaskList({
           </button>
         </div>
       ) : (
-        <ul className="flex flex-col gap-3 w-full h-full overflow-y-auto pr-1 scrollbar-hide">
+        <ul className="flex flex-col gap-3 w-full h-full overflow-y-auto overflow-x-visible pr-1 pb-3 scrollbar-hide">
           <AnimatePresence>
             {filtered.map((task, index) => {
               const stroke = strokeColors[index % strokeColors.length];
               return (
                 <motion.li
                   key={task._id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.12 }}
                   onClick={() => {
                     if (isMobile) {
                       navigate(`/viewtask/${task._id}`);
@@ -124,8 +124,8 @@ function TaskList({
                     border-slate-200 dark:border-slate-700
                     bg-white dark:bg-slate-800
                     text-slate-800 dark:text-slate-100 
-                    shadow-sm transition-all duration-200 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-800 hover:-translate-y-0.5 relative ${
-                      openActionId === task._id ? 'z-[60]' : 'z-10'
+                    shadow-sm transition-shadow duration-150 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 relative isolate ${
+                      openActionId === task._id ? 'z-[200]' : 'z-[1]'
                     }`}
                 >
                   {/* Top Row */}
@@ -153,7 +153,7 @@ function TaskList({
                       </button>
 
                       {openActionId === task._id && (
-                        <div className="absolute z-50 right-0 mt-2">
+                        <div className="absolute z-[220] right-0 top-full mt-1">
                           <Actions
                             task={task}
                             fetchTasksWithRetry={fetchTasksWithRetry}

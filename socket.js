@@ -14,27 +14,20 @@ module.exports = {
     });
 
     io.on('connection', (socket) => {
-      //console.log('🔌 New connection:', socket.id);
-
-      // ✅ Join personal user room
       socket.on('join_user', (username) => {
         if (username) {
-          socket.join(username);
-          //console.log(`🔐 Socket ${socket.id} joined user room: ${username}`);
+          socket.join(String(username));
         }
       });
 
-      // ✅ Join multiple team rooms
       socket.on('join_teams', (teamIds = []) => {
-        teamIds.forEach((teamId) => {
-          socket.join(teamId);
-          //console.log(`🔐 Socket ${socket.id} joined team room: ${teamId}`);
+        (Array.isArray(teamIds) ? teamIds : []).forEach((teamId) => {
+          if (teamId == null || teamId === '') return;
+          socket.join(String(teamId));
         });
       });
 
-      socket.on('disconnect', () => {
-        //console.log('❌ Disconnected:', socket.id);
-      });
+      socket.on('disconnect', () => {});
     });
 
     return io;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import TaskStatusCard from '../components/TaskStatusCard';
 import api from '../api';
 import useAuthToken from '../utils/useAuthToken';
@@ -8,8 +7,6 @@ import TasksOverTimeChart from '../components/TasksOverTimeChart';
 import TasksPerTeamChart from '../components/TasksPerTeamChart';
 
 function Dashboard() {
-  const { setNotification } = useOutletContext();
-
   const [tasks, setTasks] = useState([]);
   const [teams, setTeams] = useState([]);
 
@@ -35,33 +32,29 @@ function Dashboard() {
 
   return (
     <motion.div
-      className="min-h-screen sm:h-[calc(100vh-4.5rem)] bg-slate-50 dark:bg-slate-900 flex flex-col overflow-auto sm:overflow-hidden p-4 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 p-3 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     >
       <motion.div
-        className="w-full max-w-7xl mx-auto flex-1"
-        initial={{ y: 10, opacity: 0 }}
+        className="w-full max-w-7xl mx-auto flex-1 min-h-0 flex flex-col"
+        initial={{ y: 4, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-4 sm:p-6 h-full flex flex-col sm:flex-row sm:gap-6 transition-all duration-300">
-
-          {/* Right side - Status + Team Chart */}
-          <div className="order-1 sm:order-2 w-full sm:w-[22rem] flex-shrink-0 flex flex-col gap-6 mt-6 sm:mt-0">
-            <div className="flex justify-center sm:justify-start">
-              <TaskStatusCard tasks={tasks} />
-            </div>
-
-            <div className="flex justify-center sm:justify-start h-full mb-2 sm:mb-0 w-full">
-              <TasksPerTeamChart tasks={tasks} teams={teams} />
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col gap-6 lg:flex-row lg:gap-8 transition-all duration-300 overflow-hidden">
+          <div className="flex-1 min-h-0 min-w-0 flex flex-col order-2 lg:order-1">
+            <div className="h-[min(42vh,22rem)] sm:h-[min(50vh,26rem)] lg:h-[min(76vh,36rem)] min-h-[220px] w-full">
+              <TasksOverTimeChart tasks={tasks} />
             </div>
           </div>
 
-          {/* Left side - Timeline Chart */}
-          <div className="flex justify-center sm:justify-start h-[40vh] sm:h-full w-full min-w-0">
-            <TasksOverTimeChart tasks={tasks} />
+          <div className="w-full lg:w-[22rem] flex-shrink-0 flex flex-col gap-4 order-1 lg:order-2 min-h-0">
+            <TaskStatusCard tasks={tasks} />
+            <div className="w-full min-h-0 flex-1 min-h-[200px] overflow-x-auto overflow-y-visible pb-2">
+              <TasksPerTeamChart tasks={tasks} teams={teams} />
+            </div>
           </div>
         </div>
       </motion.div>

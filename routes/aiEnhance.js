@@ -28,7 +28,7 @@ router.post(
           'You are an assistant for a task management app.',
           'Rewrite the task title to be concise, actionable, and human.',
           'Rules:',
-          '- Keep it between 4 and 10 words.',
+          '- Keep it between 4 and 12 words.',
           '- Keep the original intent.',
           '- Use plain language.',
           '- Do NOT add quotes, bullets, labels, markdown, or explanations.',
@@ -39,12 +39,13 @@ router.post(
 
       return [
         'You are an assistant for a task management app.',
-        'Rewrite the task description so it is clear, practical, and easy to execute.',
+        'Expand and rewrite the task description to be long, precise, and immediately useful for execution.',
         'Rules:',
-        '- Keep the same intent and important details.',
-        '- Use 2-5 short sentences.',
-        '- Keep it concise and readable.',
-        '- Do NOT add headings, labels, markdown, or explanations.',
+        '- Preserve the original intent and constraints.',
+        '- Write 6 to 12 full sentences.',
+        '- Include: goal, scope, suggested steps, acceptance criteria, dependencies/risks if implied.',
+        '- Use clear paragraphs or line breaks are allowed within the text (no markdown headings).',
+        '- Do NOT add a preamble like "Here is" or "Sure".',
         '- Return only the improved description text.',
         `Input: "${input}"`,
       ].join('\n');
@@ -61,13 +62,14 @@ router.post(
         cleaned = cleaned.split('\n').find((line) => line.trim()) || cleaned;
         cleaned = cleaned.replace(/^[-*]\s*/, '').trim();
         const words = cleaned.split(/\s+/).filter(Boolean);
-        if (words.length > 10) cleaned = words.slice(0, 10).join(' ');
+        if (words.length > 14) cleaned = words.slice(0, 14).join(' ');
       }
 
       return cleaned;
     };
 
-    const sendToGemini = async (text) => {
+    const sendToGemini = async (text, type) => {
+      const isDescription = type === 'description';
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
         {
@@ -77,9 +79,9 @@ router.post(
             },
           ],
           generationConfig: {
-            temperature: 0.35,
+            temperature: isDescription ? 0.45 : 0.35,
             topP: 0.9,
-            maxOutputTokens: 180,
+            maxOutputTokens: isDescription ? 2048 : 120,
           },
         }
       );
@@ -88,11 +90,11 @@ router.post(
 
     const result = {};
     if (title && title.length >= 3) {
-      const enhancedTitle = await sendToGemini(makePrompt('title', title));
+      const enhancedTitle = await sendToGemini(makePrompt('title', title), 'title');
       result.enhancedTitle = sanitizeOutput(enhancedTitle, 'title');
     }
     if (description && description.length >= 3) {
-      const enhancedDescription = await sendToGemini(makePrompt('description', description));
+      const enhancedDescription = await sendToGemini(makePrompt('description', description), 'description');
       result.enhancedDescription = sanitizeOutput(enhancedDescription, 'description');
     }
 

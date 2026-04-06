@@ -68,21 +68,21 @@ function MyTasks() {
 
   return (
     <motion.div
-      className="min-h-screen sm:h-[calc(100vh-4.5rem)] bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col overflow-auto sm:overflow-hidden p-4 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     >
       <motion.div
-        className="w-full max-w-7xl mx-auto flex-1"
-        initial={{ y: 10, opacity: 0 }}
+        className="w-full max-w-7xl mx-auto flex-1 min-h-0 flex flex-col"
+        initial={{ y: 6, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-4 sm:p-6 h-full flex flex-col sm:flex-row sm:gap-6 transition-all duration-300">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col md:flex-row md:gap-6 transition-all duration-300 overflow-hidden">
 
           {/* Task List */}
-          <div className="order-2 -mt-1 sm:mt-0 sm:order-1 sm:h-full flex-1 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide min-w-0">
+          <div className="order-2 md:order-1 flex-1 min-h-0 min-w-0 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
             <TaskList
               tasks={filteredTasksList}
               statuses={["Pending", "In Progress", "Completed"]}
@@ -100,8 +100,8 @@ function MyTasks() {
           </div>
 
           {/* Task Preview */}
-          <div className="order-1 sm:order-2 w-full sm:w-[28rem] flex-shrink-0 flex flex-col gap-6 mt-6 sm:mt-0">
-            <div className="hidden sm:block h-[31rem] bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-y-auto scrollbar-hide">
+          <div className="order-1 md:order-2 w-full md:w-[min(28rem,100%)] flex-shrink-0 flex flex-col gap-4 mt-2 md:mt-0">
+            <div className="hidden md:flex md:flex-col md:min-h-0 md:h-[min(32rem,70vh)] bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-y-auto scrollbar-hide">
               {selectedTaskId ? (
                 <Tasks
                   tasks={tasks}

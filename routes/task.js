@@ -70,6 +70,19 @@ router.put(
       shareWith
     );
 
+    const io = getIO();
+    const fullTask = await taskRepo.findById(Number(id));
+    if (fullTask) {
+      (fullTask.shareWith || []).forEach((u) => {
+        if (u && u !== username) {
+          io.to(String(u)).emit('task_updated', {
+            message: `${username} updated "${fullTask.title}"`,
+            taskId: String(id),
+          });
+        }
+      });
+    }
+
     res.json({ message: 'Task updated', task: updatedTask });
   })
 );

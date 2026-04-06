@@ -64,21 +64,21 @@ function Collaborate() {
 
   return (
     <motion.div
-      className="min-h-screen sm:h-[calc(100vh-4.5rem)] bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col overflow-auto sm:overflow-hidden p-4 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.2 }}
     >
       <motion.div
-        className="w-full max-w-7xl mx-auto flex-1"
-        initial={{ y: 10, opacity: 0 }}
+        className="w-full max-w-7xl mx-auto flex-1 min-h-0 flex flex-col"
+        initial={{ y: 6, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-4 sm:p-6 h-full flex flex-col gap-y-5 sm:flex-row sm:gap-6 transition-all duration-300">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col gap-4 lg:flex-row lg:gap-6 transition-all duration-300 overflow-hidden">
 
           {/* Team List */}
-          <div className="order-1 sm:h-full w-full h-full sm:w-1/2 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide">
+          <div className="order-1 w-full lg:w-1/2 min-h-[240px] lg:min-h-0 lg:h-auto bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
             <TeamList
               teams={teams}
               onTeamClick={(teamId) => {
@@ -96,7 +96,7 @@ function Collaborate() {
           </div>
 
           {/* Task List */}
-          <div className="order-2 min-h-[240px] sm:min-h-0 sm:h-full w-full sm:w-1/2 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide">
+          <div className="order-2 w-full lg:w-1/2 min-h-[240px] lg:min-h-0 flex-1 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
             <TaskList
               tasks={filteredTasks}
               statuses={["Pending", "In Progress", "Completed"]}

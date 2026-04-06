@@ -4,7 +4,6 @@ import PageHeader from '../components/PageHeader';
 import Menu from '../components/Menu';
 import Notification from '../components/notification';
 import useSocketNotifications from '../hooks/useSocketNotifications';
-import useIsMobile from '../utils/useScreenSize';
 
 function MainLayout() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,21 +32,6 @@ function MainLayout() {
   }, [location]);
 
   useEffect(() => {
-    if (isMobile) {
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
-    } else {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-      document.documentElement.style.overflow = 'auto';
-    };
-  }, [isMobile]);
-
-  useEffect(() => {
     localStorage.setItem('darkMode', darkMode);
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -74,7 +58,7 @@ function MainLayout() {
   const { red, black } = getTitles(path);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+    <div className="min-h-screen min-h-[100dvh] flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
       {notification && (
         <Notification message={notification} onClose={() => setNotification(null)} />
       )}
@@ -85,7 +69,7 @@ function MainLayout() {
         </aside>
       )}
 
-      <div className={shouldShowHeader ? 'sm:ml-64' : ''}>
+      <div className={`flex flex-col flex-1 min-h-0 ${shouldShowHeader ? 'sm:ml-64' : ''}`}>
         {shouldShowHeader && (
           <PageHeader
             redTitle={red}
@@ -99,7 +83,7 @@ function MainLayout() {
           />
         )}
 
-        <main className="flex-1">
+        <main className="flex-1 min-h-0 w-full overflow-x-hidden overflow-y-auto">
           <Outlet
             context={{
               searchTerm,

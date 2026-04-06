@@ -3,21 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Notification({ message, onClose }) {
   useEffect(() => {
-    const timer = setTimeout(() => onClose(), 3000);
+    const timer = setTimeout(() => onClose(), 4000);
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, [onClose, message]);
 
   return (
     <AnimatePresence>
       {message && (
         <motion.div
-          initial={{ opacity: 0, x: 300 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 300 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed top-40 sm:top-20 right-4 z-50 w-auto max-w-sm px-5 py-3 rounded-xl shadow-2xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 dark:from-indigo-600 dark:via-indigo-700 dark:to-violet-700 text-white text-base sm:text-sm font-semibold"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+          className="fixed left-3 right-3 sm:left-auto sm:right-4 top-[max(4.5rem,env(safe-area-inset-top,0px)+0.75rem)] sm:top-20 z-[200] sm:max-w-md sm:w-auto pointer-events-none"
         >
-          {message}
+          <div
+            className="pointer-events-auto rounded-xl px-4 py-3 shadow-xl bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-700 dark:to-violet-800 text-white text-sm sm:text-sm font-semibold leading-snug whitespace-normal break-words [overflow-wrap:anywhere] hyphens-auto"
+            role="status"
+          >
+            {message}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
