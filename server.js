@@ -7,13 +7,15 @@ const socket = require('./socket');
 const { getPool } = require('./config/db');
 require('dotenv').config();
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 // ========== MIDDLEWARE ==========
 app.use(
   cors({
-    origin: [
-      'http://localhost:5173',
-      'https://tf-task-management-system.netlify.app',
-    ],
+    origin: allowedOrigins,
     credentials: true,
   })
 );

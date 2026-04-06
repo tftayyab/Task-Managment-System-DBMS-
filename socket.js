@@ -1,10 +1,14 @@
 let io;
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
 module.exports = {
   init: (server) => {
     io = require('socket.io')(server, {
       cors: {
-        origin: ['http://localhost:5173', 'https://tf-task-management-system.netlify.app'],
+        origin: allowedOrigins,
         credentials: true,
       },
     });
