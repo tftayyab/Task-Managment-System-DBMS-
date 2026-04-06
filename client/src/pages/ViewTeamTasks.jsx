@@ -7,14 +7,12 @@ import useAuthToken from '../utils/useAuthToken';
 import ShareTasks from './ShareTasks';
 import { motion } from 'framer-motion';
 import TaskList from '../components/TaskList';
-import useIsMobile from '../utils/useScreenSize'; // ✅
+import useIsMobile from '../utils/useScreenSize';
 
 function ViewTeamTasks() {
   const {
     searchTerm,
     setSearchTerm,
-    isMenuOpen,
-    setIsMenuOpen,
     setNotification,
   } = useOutletContext();
 
@@ -59,7 +57,7 @@ function ViewTeamTasks() {
       setTasks(teamTasks);
       setFilteredTasksList(teamTasks);
     } catch (err) {
-      console.error("❌ Fetch error:", err.response?.data || err.message);
+      console.error("Fetch error:", err.response?.data || err.message);
     } finally {
       setLoading(false);
     }
@@ -76,61 +74,57 @@ function ViewTeamTasks() {
 
   return (
     <motion.div
-      className="min-h-screen h-screen bg-white dark:bg-[#121212] text-black dark:text-white flex flex-col overflow-hidden"
+      className="min-h-screen sm:h-[calc(100vh-4.5rem)] bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col overflow-auto sm:overflow-hidden p-4 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3 }}
     >
-      {/* ✅ Row: Menu + Main Box */}
       <motion.div
-        className="flex flex-row mt-[2rem] gap-x-20 sm:mt-[1rem]"
-        initial={{ scale: 0.98, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
+        className="w-full max-w-7xl mx-auto flex-1"
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6">
-          {!isMenuOpen && (
-            <div className="relative z-0 border sm:h-[76vh] border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col sm:flex-row sm:gap-6 sm:w-[150vh] w-[40vh] bg-white dark:bg-[#1e1e1e] transition-all duration-300">
-              {/* 🔷 Right Side: Task Preview */}
-              <div className="order-1 sm:order-2 w-full flex flex-col gap-6 sm:mt-0">
-                {isMobile ? (
-                  <div className="h-full bg-[#F5F8FF] dark:bg-[#1f1f1f] p-4 rounded-xl border dark:border-gray-700 overflow-y-auto scrollbar-hide">
-                    <TaskList
-                      tasks={tasks}
-                      statuses={["Pending", "In Progress", "Completed"]}
-                      fetchTasksWithRetry={fetchTasksWithRetry}
-                      onTaskClick={(taskId) => navigate(`/viewtask/${taskId}`)}
-                      setEditTask={setEditTask}
-                      setShareTask={setShareTask}
-                      searchTerm={searchTerm}
-                      loading={loading}
-                    />
-                  </div>
-                ) : (
-                  selectedTaskId && (
-                    <div className="h-[31rem] bg-[#F5F8FF] dark:bg-[#1f1f1f] p-4 rounded-xl sm:mt-0 -mt-5 border dark:border-gray-700 overflow-y-auto scrollbar-hide">
-                      <Tasks
-                        tasks={tasks}
-                        task_id={selectedTaskId}
-                        setEditTask={setEditTask}
-                        setShareTask={setShareTask}
-                        fetchTasksWithRetry={fetchTasksWithRetry}
-                        loading={loading}
-                      />
-                    </div>
-                  )
-                )}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-4 sm:p-6 h-full flex flex-col sm:flex-row sm:gap-6 transition-all duration-300">
+          <div className="w-full flex flex-col gap-6">
+            {isMobile ? (
+              <div className="h-full bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 overflow-y-auto scrollbar-hide">
+                <TaskList
+                  tasks={tasks}
+                  statuses={["Pending", "In Progress", "Completed"]}
+                  fetchTasksWithRetry={fetchTasksWithRetry}
+                  onTaskClick={(taskId) => navigate(`/viewtask/${taskId}`)}
+                  setEditTask={setEditTask}
+                  setShareTask={setShareTask}
+                  searchTerm={searchTerm}
+                  loading={loading}
+                  setNotification={setNotification}
+                />
               </div>
-            </div>
-          )}
+            ) : (
+              selectedTaskId && (
+                <div className="h-[31rem] bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 overflow-y-auto scrollbar-hide">
+                  <Tasks
+                    tasks={tasks}
+                    task_id={selectedTaskId}
+                    setEditTask={setEditTask}
+                    setShareTask={setShareTask}
+                    setNotification={setNotification}
+                    fetchTasksWithRetry={fetchTasksWithRetry}
+                    loading={loading}
+                  />
+                </div>
+              )
+            )}
+          </div>
         </div>
       </motion.div>
 
-      {/* ✅ Modals */}
       {editTask && (
         <Edit
           taskData={editTask}
           onClose={() => setEditTask(null)}
+          setNotification={setNotification}
           fetchTasksWithRetry={() => {
             fetchTasksWithRetry();
             setNotification("Task updated successfully");
@@ -142,6 +136,7 @@ function ViewTeamTasks() {
         <ShareTasks
           taskData={shareTask}
           onClose={() => setShareTask(null)}
+          setNotification={setNotification}
           fetchTasksWithRetry={() => {
             fetchTasksWithRetry();
             setNotification("Task shared with team");

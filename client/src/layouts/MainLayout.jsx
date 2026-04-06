@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
+import Menu from '../components/Menu';
 import Notification from '../components/notification';
 import useSocketNotifications from '../hooks/useSocketNotifications';
 import useIsMobile from '../utils/useScreenSize';
@@ -19,21 +20,18 @@ function MainLayout() {
   const navigate = useNavigate();
   useSocketNotifications(setNotification);
 
-  // Search redirect
   useEffect(() => {
     if (path !== '/collaborate' && searchTerm.trim().length > 0) {
       navigate('/mytasks');
     }
   }, [searchTerm, path, navigate]);
 
-  // Clear search on page change
   useEffect(() => {
     if (!location.pathname.startsWith('/mytasks')) {
       setSearchTerm('');
     }
   }, [location]);
 
-  // Handle scroll behavior
   useEffect(() => {
     if (isMobile) {
       document.body.style.overflow = 'auto';
@@ -49,7 +47,6 @@ function MainLayout() {
     };
   }, [isMobile]);
 
-  // Sync dark mode with localStorage
   useEffect(() => {
     localStorage.setItem('darkMode', darkMode);
     if (darkMode) {
@@ -77,34 +74,43 @@ function MainLayout() {
   const { red, black } = getTitles(path);
 
   return (
-    <div className="min-h-screen flex flex-col overflow-auto sm:overflow-hidden bg-white text-black dark:bg-gray-900 dark:text-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
       {notification && (
         <Notification message={notification} onClose={() => setNotification(null)} />
       )}
 
       {shouldShowHeader && (
-        <PageHeader
-          redTitle={red}
-          blackTitle={black}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          setIsMenuOpen={setIsMenuOpen}
-          toggleDarkMode={toggleDarkMode}
-          darkMode={darkMode}
-        />
+        <aside className="hidden sm:flex fixed left-0 top-0 h-full w-64 z-40">
+          <Menu toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+        </aside>
       )}
 
-      <main className="flex-1">
-        <Outlet
-          context={{
-            searchTerm,
-            setSearchTerm,
-            setNotification,
-            isMenuOpen,
-            setIsMenuOpen,
-          }}
-        />
-      </main>
+      <div className={shouldShowHeader ? 'sm:ml-64' : ''}>
+        {shouldShowHeader && (
+          <PageHeader
+            redTitle={red}
+            blackTitle={black}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            toggleDarkMode={toggleDarkMode}
+            darkMode={darkMode}
+          />
+        )}
+
+        <main className="flex-1">
+          <Outlet
+            context={{
+              searchTerm,
+              setSearchTerm,
+              setNotification,
+              isMenuOpen,
+              setIsMenuOpen,
+            }}
+          />
+        </main>
+      </div>
     </div>
   );
 }

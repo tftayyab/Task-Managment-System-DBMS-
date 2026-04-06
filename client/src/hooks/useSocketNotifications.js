@@ -4,8 +4,21 @@ import socket from '../utils/socket'; // NOT `import  socket` (no extra space)
 
 function useSocketNotifications(setNotification) {
   useEffect(() => {
-    const handleTeamAdded = (data) => setNotification(data.message);
-    const handleTeamUpdated = (data) => setNotification(data.message);
+    const joinTeamRoom = (teamId) => {
+      if (!teamId) return;
+      socket.emit('join_teams', [teamId]);
+    };
+
+    const handleTeamAdded = (data) => {
+      setNotification(data.message);
+      joinTeamRoom(data.teamId);
+    };
+
+    const handleTeamUpdated = (data) => {
+      setNotification(data.message);
+      joinTeamRoom(data.teamId);
+    };
+
     const handleTaskCreated = (data) => setNotification(data.message);
 
     socket.on('team_added', handleTeamAdded);

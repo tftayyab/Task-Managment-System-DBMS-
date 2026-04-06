@@ -26,54 +26,49 @@ function Register() {
   }, []);
 
   const handleRegister = async () => {
-  setErrors([]);
+    setErrors([]);
 
-  // ✅ Frontend validations
-  if (!formData.termsAccepted) {
-    setErrors(["You must agree to the terms."]);
-    return;
-  }
-
-  if (formData.password !== formData.confirmPassword) {
-    setErrors(["Passwords do not match."]);
-    return;
-  }
-
-  // ✅ Prepare data for backend (remove confirmPassword and termsAccepted)
-  const { confirmPassword, termsAccepted, ...payload } = formData;
-
-  try {
-    setLoading(true);
-
-    // ✅ Send to backend
-    await axios.post(`${import.meta.env.VITE_API_URL}/register`, payload);
-
-    // ✅ On success, go to login page
-    navigate("/login");
-  } catch (err) {
-    // ✅ Error handling
-    if (err.response?.data?.errors) {
-      setErrors(err.response.data.errors);
-    } else if (err.response?.data?.message) {
-      setErrors([err.response.data.message]);
-    } else {
-      setErrors(["Something went wrong. Please try again."]);
+    if (!formData.termsAccepted) {
+      setErrors(["You must agree to the terms."]);
+      return;
     }
-  } finally {
-    setLoading(false);
-  }
-};
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors(["Passwords do not match."]);
+      return;
+    }
+
+    const { confirmPassword, termsAccepted, ...payload } = formData;
+
+    try {
+      setLoading(true);
+      await axios.post(`${import.meta.env.VITE_API_URL}/register`, payload);
+      navigate("/login");
+    } catch (err) {
+      if (err.response?.data?.errors) {
+        setErrors(err.response.data.errors);
+      } else if (err.response?.data?.message) {
+        setErrors([err.response.data.message]);
+      } else {
+        setErrors(["Something went wrong. Please try again."]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <PageWrapper>
-      <div className="relative w-full h-screen bg-gray-100 dark:bg-[#0d0d0d] overflow-hidden">
+      <div className="relative w-full h-screen bg-slate-50 dark:bg-slate-900 overflow-hidden">
 
-        {/* Background Image */}
-        <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-center bg-cover z-0 opacity-70 dark:opacity-30" />
+        <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-center bg-cover z-0 opacity-30 dark:opacity-15" />
 
-        {/* Overlay image (left side) */}
+        {/* Decorative elements */}
+        <div className="absolute top-40 left-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl hidden sm:block" />
+        <div className="absolute bottom-20 right-20 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl hidden sm:block" />
+
         <div
-          className="absolute z-10 hidden sm:block bg-[url('/register_image.png')] bg-cover bg-center opacity-75"
+          className="absolute z-10 hidden sm:block bg-[url('/register_image.png')] bg-cover bg-center opacity-50"
           style={{
             width: '50vw',
             height: '90vw',
@@ -82,11 +77,10 @@ function Register() {
           }}
         />
 
-        {/* Form */}
         <div className="relative z-10 h-full flex justify-center sm:justify-end items-start pt-[5vh] pr-0 sm:pr-[8vw]">
           <div className="w-full sm:w-[420px] flex flex-col items-center sm:items-start">
 
-            <h1 className="text-[#212427] dark:text-white mt-8 sm:mt-1 font-montserrat text-3xl sm:text-4xl font-bold leading-tight text-center sm:text-left ml-3">
+            <h1 className="text-slate-800 dark:text-white mt-8 sm:mt-1 font-montserrat text-3xl sm:text-4xl font-bold leading-tight text-center sm:text-left ml-3">
               Sign Up
             </h1>
 
@@ -102,7 +96,7 @@ function Register() {
                   <input
                     type={type}
                     placeholder={placeholder}
-                    className="RegisterInput dark:bg-[#1f1f1f] dark:border-[#888] dark:text-white dark:placeholder:text-[#aaa]"
+                    className="RegisterInput"
                     value={formData[name]}
                     onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
                   />
@@ -115,7 +109,7 @@ function Register() {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter Password"
-                  className="RegisterInput dark:bg-[#1f1f1f] dark:border-[#888] dark:text-white dark:placeholder:text-[#aaa]"
+                  className="RegisterInput"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
@@ -130,7 +124,7 @@ function Register() {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
-                  className="RegisterInput dark:bg-[#1f1f1f] dark:border-[#888] dark:text-white dark:placeholder:text-[#aaa]"
+                  className="RegisterInput"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 />
@@ -149,11 +143,11 @@ function Register() {
                   name="termsAccepted"
                   checked={formData.termsAccepted}
                   onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
-                  className="peer w-5 h-5 appearance-none border border-[#565454] rounded-sm bg-white dark:bg-[#1f1f1f] 
-                             checked:bg-[#FF6767] transition-all duration-200 grid place-content-center"
+                  className="peer w-5 h-5 appearance-none border border-slate-400 rounded-md bg-white dark:bg-slate-800 
+                             checked:bg-indigo-500 dark:checked:bg-indigo-500 transition-all duration-200 grid place-content-center"
                 />
                 <TickIcon />
-                <span className="ml-2 text-[#212427] dark:text-white font-montserrat text-base font-medium">
+                <span className="ml-2 text-slate-700 dark:text-white font-montserrat text-base font-medium">
                   I agree to all terms
                 </span>
               </label>
@@ -161,28 +155,28 @@ function Register() {
 
             {/* Errors */}
             {errors.length > 0 && (
-              <div className="px-4 text-red-600 dark:text-red-400">
+              <div className="px-4 text-red-500 dark:text-red-400 mt-2">
                 <ul className="list-disc ml-4 text-sm">
                   {errors.map((err, idx) => <li key={idx}>{err}</li>)}
                 </ul>
               </div>
             )}
 
-            {/* Submit + Already have account */}
+            {/* Submit */}
             <div className="mt-2 sm:mt-4 px-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
               <button
-                className="text-[#F8F9FB] bg-[#FF9090] text-sm sm:text-base font-medium px-6 py-3 sm:px-10 sm:py-4 rounded 
-                           transition-all duration-300 ease-in-out hover:bg-[#FF6F6F] hover:shadow-lg active:scale-95"
+                className="text-white bg-indigo-500 text-sm sm:text-base font-semibold px-6 py-3 sm:px-10 sm:py-4 rounded-xl 
+                           transition-all duration-300 ease-in-out hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/25 active:scale-95"
                 onClick={handleRegister}
                 disabled={loading}
               >
                 {loading ? 'Registering...' : 'Register'}
               </button>
 
-              <p className="text-[#212427] dark:text-white font-montserrat text-base font-medium text-center sm:text-left sm:ml-12">
+              <p className="text-slate-700 dark:text-white font-montserrat text-base font-medium text-center sm:text-left sm:ml-12">
                 Already have an account?{' '}
                 <span
-                  className="text-[#008BD9] dark:text-[#4fbaff] hover:text-[#005f99] dark:hover:text-[#69cdff] underline cursor-pointer transition-colors"
+                  className="text-indigo-500 dark:text-indigo-400 hover:underline cursor-pointer transition-colors"
                   onClick={() => navigate('/login')}
                 >
                   Sign In

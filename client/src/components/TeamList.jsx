@@ -14,11 +14,12 @@ function TeamList({
   selectedTeam,
   setSelectedTeam,
   loading = false,
+  setNotification,
 }) {
   const [openActionId, setOpenActionId] = useState(null);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const strokeColors = ['#F21E1E', '#FFB347', '#3ABEFF', '#4CAF50'];
+  const strokeColors = ['#6366f1', '#f59e0b', '#0ea5e9', '#10b981'];
 
   useEffect(() => {
     const close = () => setOpenActionId(null);
@@ -29,7 +30,7 @@ function TeamList({
   const isEmpty = !loading && teams.length === 0;
 
   return (
-    <div className="w-full h-full flex flex-col text-black dark:text-white">
+    <div className="w-full h-full flex flex-col text-slate-800 dark:text-slate-100">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div
@@ -37,35 +38,34 @@ function TeamList({
           className="flex items-center gap-x-2 cursor-pointer group"
         >
           <TeamIcon className="w-4 h-4" />
-          <p className="text-[#FF6767] text-sm font-medium group-hover:underline">Teams</p>
+          <p className="text-indigo-500 dark:text-indigo-400 text-sm font-semibold group-hover:underline">Teams</p>
         </div>
 
         <button
           onClick={() => onAddTeamClick?.()}
-          className="flex items-center gap-x-2 text-sm text-[#A1A3AB] hover:text-[#FF6767] transition-all"
+          className="flex items-center gap-x-2 text-sm text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-all"
         >
           <AddIcon className="w-4 h-4" />
           <span>Add Team</span>
         </button>
       </div>
 
-      {/* Loader */}
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-10 h-10 border-4 border-dashed border-[#FF9090] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-500 rounded-full animate-spin" />
         </div>
       ) : isEmpty ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center">
-          <p className="text-gray-400 text-lg font-inter mb-2 dark:text-gray-500">No Teams Found</p>
+          <p className="text-slate-400 dark:text-slate-500 text-lg font-inter mb-2">No Teams Found</p>
           <button
             onClick={() => onAddTeamClick?.()}
-            className="text-[#FF6767] font-medium hover:underline mt-1"
+            className="text-indigo-500 dark:text-indigo-400 font-medium hover:underline mt-1"
           >
             + Add Team
           </button>
         </div>
       ) : (
-        <ul className="flex flex-col gap-4 w-full h-full overflow-y-auto pr-1 scrollbar-hide">
+        <ul className="flex flex-col gap-3 w-full h-full overflow-y-auto pr-1 scrollbar-hide">
           <AnimatePresence>
             {teams.map((team, index) => {
               const stroke = strokeColors[index % strokeColors.length];
@@ -83,25 +83,24 @@ function TeamList({
                       onTeamClick?.(team._id);
                     }
                   }}
-                  className="cursor-pointer group p-4 rounded-xl border border-[#A1A3AB] dark:border-gray-700 bg-white dark:bg-[#1e1e1e] shadow transition-all duration-200 hover:shadow-lg hover:scale-[1.001] relative"
+                  className="cursor-pointer group p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-200 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-800 hover:-translate-y-0.5 relative"
                 >
                   {/* Top Row */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <CircleIcon className="flex-shrink-0 mt-1 w-4 h-4" stroke={stroke} />
-                      <p className="text-black dark:text-white font-inter text-base font-semibold truncate">
+                      <p className="text-slate-800 dark:text-white font-inter text-base font-semibold truncate">
                         {team.teamName || 'Unnamed Team'}
                       </p>
                     </div>
 
-                    {/* Actions */}
                     <div className="relative hidden sm:block">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setOpenActionId(prev => (prev === team._id ? null : team._id));
                         }}
-                        className="hover:scale-110 transition-transform p-2"
+                        className="hover:scale-110 transition-transform p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
                       >
                         <OptionIcon />
                       </button>
@@ -114,6 +113,7 @@ function TeamList({
                             setEditTeam={setEditTeam}
                             selectedTeam={selectedTeam}
                             setSelectedTeam={setSelectedTeam}
+                            setNotification={setNotification}
                           />
                         </div>
                       )}
@@ -121,13 +121,13 @@ function TeamList({
                   </div>
 
                   {/* Details */}
-                  <div className="mt-2 text-sm text-[#555] dark:text-gray-300">
+                  <div className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                     <p>
-                      <span className="font-medium text-black dark:text-white">Owner:</span>{' '}
+                      <span className="font-medium text-slate-700 dark:text-slate-200">Owner:</span>{' '}
                       {team.owner}
                     </p>
                     <p>
-                      <span className="font-medium text-black dark:text-white">Shared With:</span>{' '}
+                      <span className="font-medium text-slate-700 dark:text-slate-200">Shared With:</span>{' '}
                       {team.shareWith?.length > 0 ? team.shareWith.join(', ') : 'No one yet'}
                     </p>
                   </div>

@@ -10,7 +10,7 @@ import useAuthToken from '../utils/useAuthToken';
 import { motion } from 'framer-motion';
 
 function Collaborate() {
-  const { searchTerm, isMenuOpen, setNotification } = useOutletContext();
+  const { searchTerm, setNotification } = useOutletContext();
 
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ function Collaborate() {
         setSelectedTeam(null);
       }
     } catch (err) {
-      console.error("❌ Failed to load shared data:", err.response?.data || err.message);
+      console.error("Failed to load shared data:", err.response?.data || err.message);
     } finally {
       setLoading(false);
     }
@@ -64,64 +64,61 @@ function Collaborate() {
 
   return (
     <motion.div
-      className="min-h-screen h-screen bg-white dark:bg-[#121212] text-black dark:text-white flex flex-col overflow-hidden"
+      className="min-h-screen sm:h-[calc(100vh-4.5rem)] bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col overflow-auto sm:overflow-hidden p-4 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3 }}
     >
-      {/* Layout */}
       <motion.div
-        className="flex flex-row mt-[2rem] gap-x-20 sm:mt-[1rem]"
-        initial={{ scale: 0.98, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
+        className="w-full max-w-7xl mx-auto flex-1"
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6 w-full min-w-0">
-          {!isMenuOpen && (
-            <div className="relative z-0 border min-h-[min(75vh,720px)] sm:h-[76vh] w-full max-w-6xl border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col gap-y-5 sm:flex-row sm:gap-6 bg-white dark:bg-[#1e1e1e] transition-all duration-300">
-              
-              {/* 🔹 Team List */}
-              <div className="order-1 sm:h-full w-full h-full sm:w-1/2 bg-[#F5F8FF] dark:bg-[#2a2a2a] rounded-xl p-6 overflow-y-auto scrollbar-hide">
-                <TeamList
-                  teams={teams}
-                  onTeamClick={(teamId) => {
-                    const team = teams.find((t) => t._id === teamId);
-                    setSelectedTeam(team);
-                  }}
-                  onAddTeamClick={() => setShowTeamForm(true)}
-                  fetchTeamsWithRetry={fetchSharedData}
-                  setEditTeam={setEditTeam}
-                  selectedTeam={selectedTeam}
-                  setSelectedTeam={setSelectedTeam}
-                  loading={loading}
-                />
-              </div>
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-4 sm:p-6 h-full flex flex-col gap-y-5 sm:flex-row sm:gap-6 transition-all duration-300">
 
-              {/* 🔸 Task List */}
-              <div className="order-2 sm:order-2 min-h-[240px] sm:min-h-0 sm:h-full w-full sm:w-1/2 bg-[#F5F8FF] dark:bg-[#2a2a2a] rounded-xl p-6 overflow-y-auto scrollbar-hide">
-                <TaskList
-                  tasks={filteredTasks}
-                  statuses={["Pending", "In Progress", "Completed"]}
-                  setEditTask={setEditTask}
-                  fetchTasksWithRetry={fetchSharedData}
-                  setShareTask={setShareTask}
-                  onTaskClick={(taskId) => navigate(`/viewtask/${taskId}`)}
-                  onAddTaskClick={() => setShowTaskForm(true)}
-                  searchTerm={searchTerm}
-                  loading={loading}
-                />
-              </div>
-            </div>
-          )}
+          {/* Team List */}
+          <div className="order-1 sm:h-full w-full h-full sm:w-1/2 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide">
+            <TeamList
+              teams={teams}
+              onTeamClick={(teamId) => {
+                const team = teams.find((t) => t._id === teamId);
+                setSelectedTeam(team);
+              }}
+              onAddTeamClick={() => setShowTeamForm(true)}
+              fetchTeamsWithRetry={fetchSharedData}
+              setEditTeam={setEditTeam}
+              selectedTeam={selectedTeam}
+              setSelectedTeam={setSelectedTeam}
+              loading={loading}
+              setNotification={setNotification}
+            />
+          </div>
+
+          {/* Task List */}
+          <div className="order-2 min-h-[240px] sm:min-h-0 sm:h-full w-full sm:w-1/2 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 sm:p-6 overflow-y-auto scrollbar-hide">
+            <TaskList
+              tasks={filteredTasks}
+              statuses={["Pending", "In Progress", "Completed"]}
+              setEditTask={setEditTask}
+              fetchTasksWithRetry={fetchSharedData}
+              setShareTask={setShareTask}
+              onTaskClick={(taskId) => navigate(`/viewtask/${taskId}`)}
+              onAddTaskClick={() => setShowTaskForm(true)}
+              searchTerm={searchTerm}
+              loading={loading}
+              setNotification={setNotification}
+            />
+          </div>
         </div>
       </motion.div>
 
-      {/* ✅ Modals */}
       {showTaskForm && (
         <TaskForm
           mode="add"
           team={selectedTeam}
           onClose={() => setShowTaskForm(false)}
+          setNotification={setNotification}
           fetchTasksWithRetry={() => {
             fetchSharedData();
             setNotification("Task added to team");
@@ -135,6 +132,7 @@ function Collaborate() {
           taskData={editTask}
           team={selectedTeam}
           onClose={() => setEditTask(null)}
+          setNotification={setNotification}
           fetchTasksWithRetry={() => {
             fetchSharedData();
             setNotification("Task updated");
@@ -146,6 +144,7 @@ function Collaborate() {
         <TeamForm
           mode="add"
           onClose={() => setShowTeamForm(false)}
+          setNotification={setNotification}
           fetchTasksWithRetry={() => {
             fetchSharedData();
             setNotification("Team created successfully");
@@ -158,6 +157,7 @@ function Collaborate() {
           mode="edit"
           taskData={editTeam}
           onClose={() => setEditTeam(null)}
+          setNotification={setNotification}
           fetchTasksWithRetry={() => {
             fetchSharedData();
             setNotification("Team updated");

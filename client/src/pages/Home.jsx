@@ -13,33 +13,30 @@ function Home() {
 
   return (
     <PageWrapper>
-      <div className={`relative w-full h-screen ${isDark ? 'bg-[#121212]' : 'bg-gray-100'} overflow-hidden`}>
+      <div className={`relative w-full h-screen ${isDark ? 'bg-slate-900' : 'bg-slate-50'} overflow-hidden`}>
 
-        {/* Background Image */}
-        <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-center bg-cover z-0 opacity-50" />
+        <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-center bg-cover z-0 opacity-30" />
 
-        {/* Main Content */}
+        {/* Decorative gradient orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-sky-500/15 rounded-full blur-3xl" />
+
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 sm:px-0">
-
-          {/* Logo */}
           <img
             src="/icon.png"
             alt="Logo"
-            className="w-24 h-24 sm:w-40 sm:h-40 mb-8 transition-transform duration-500 hover:rotate-6"
+            className="w-24 h-24 sm:w-36 sm:h-36 mb-8 transition-transform duration-500 hover:scale-110 drop-shadow-xl"
           />
 
-          {/* Heading */}
-          <h1 className="text-[#FF6767] text-4xl sm:text-7xl font-semibold text-center mb-4">
-            Task <span className={`${isDark ? 'text-white' : 'text-black'}`}>Manager</span>
+          <h1 className="text-indigo-500 dark:text-indigo-400 text-4xl sm:text-7xl font-bold text-center mb-4">
+            Task <span className={`${isDark ? 'text-white' : 'text-slate-800'}`}>Manager</span>
           </h1>
 
-          {/* Subtitle */}
-          <p className={`${isDark ? 'text-gray-300' : 'text-black'} text-base sm:text-lg text-center font-medium mb-10`}>
-            Organize your tasks. Boost your productivity.
+          <p className={`${isDark ? 'text-slate-300' : 'text-slate-600'} text-base sm:text-lg text-center font-medium mb-10 max-w-md`}>
+            Organize your tasks. Collaborate with teams. Boost your productivity.
           </p>
 
-          {/* Buttons */}
-          <div className="flex gap-6">
+          <div className="flex gap-4">
             <button
               className="homeBtn"
               onClick={() => navigate('/login')}
@@ -47,7 +44,7 @@ function Home() {
               Login
             </button>
             <button
-              className="homeBtn"
+              className="text-indigo-500 dark:text-indigo-400 border-2 border-indigo-500 dark:border-indigo-400 text-sm sm:text-base font-semibold px-6 py-3 sm:px-10 sm:py-4 rounded-xl sm:w-40 transition-all duration-300 ease-in-out hover:bg-indigo-50 dark:hover:bg-indigo-500/10 active:scale-95"
               onClick={() => navigate('/register')}
             >
               Sign Up

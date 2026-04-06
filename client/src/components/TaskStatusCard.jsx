@@ -34,19 +34,19 @@ const AnimatedNumber = ({ target }) => {
 };
 
 const statusConfig = [
-  { label: 'Pending', key: 'Pending', color: '#FFB347' },
-  { label: 'In Progress', key: 'In Progress', color: '#3ABEFF' },
-  { label: 'Completed', key: 'Completed', color: '#4CAF50' },
+  { label: 'Pending', key: 'Pending', color: '#f59e0b' },
+  { label: 'In Progress', key: 'In Progress', color: '#0ea5e9' },
+  { label: 'Completed', key: 'Completed', color: '#10b981' },
 ];
 
 const CircleChart = ({ percent, color }) => {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = document.documentElement.classList.contains('dark');
 
   const data = {
     datasets: [
       {
         data: [percent, 100 - percent],
-        backgroundColor: [color, isDark ? '#333' : '#D9D9D9'],
+        backgroundColor: [color, isDark ? '#334155' : '#e2e8f0'],
         borderWidth: 0,
         cutout: '80%',
       },
@@ -69,7 +69,7 @@ const CircleChart = ({ percent, color }) => {
   return (
     <div className="relative w-20 h-20">
       <Doughnut data={data} options={options} />
-      <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold font-inter text-black dark:text-white">
+      <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold font-inter text-slate-700 dark:text-slate-200">
         <AnimatedNumber target={percent} />
       </div>
     </div>
@@ -83,11 +83,11 @@ const TaskStatusCard = ({ tasks }) => {
   const getPercent = (count) => Math.round((count / total) * 100);
 
   return (
-    <div className="w-full sm:w-[22rem] rounded-2xl bg-[#F5F8FF] dark:bg-[#1a1a1a] shadow-lg p-4 flex flex-col gap-y-4 transition hover:shadow-xl text-black dark:text-white">
+    <div className="w-full sm:w-[22rem] rounded-2xl bg-slate-50 dark:bg-slate-900/50 shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-y-4 transition-all hover:shadow-md text-slate-800 dark:text-slate-100">
       {/* Header */}
       <div className="flex items-center gap-x-2">
         <TaskIcon className="w-5 h-5 flex-shrink-0" />
-        <p className="text-[#FF6767] text-base font-medium font-inter">Task Status</p>
+        <p className="text-indigo-500 dark:text-indigo-400 text-base font-semibold font-inter">Task Status</p>
       </div>
 
       {/* Status Section */}
@@ -104,7 +104,7 @@ const TaskStatusCard = ({ tasks }) => {
               <CircleChart percent={percent} color={color} />
               <div className="flex items-center gap-1">
                 <DotIcon className="w-2 h-2" fill={color} />
-                <p className="text-xs font-medium font-inter text-black dark:text-white">
+                <p className="text-xs font-medium font-inter text-slate-600 dark:text-slate-300">
                   {label}
                 </p>
               </div>

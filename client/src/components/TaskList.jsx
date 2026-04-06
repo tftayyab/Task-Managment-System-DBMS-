@@ -17,6 +17,7 @@ function TaskList({
   mode = '',
   setShareTask,
   loading = false,
+  setNotification,
 }) {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -24,7 +25,7 @@ function TaskList({
   const clickTimeout = useRef(null);
 
   const search = searchTerm.toLowerCase().trim();
-  const strokeColors = ['#F21E1E', '#FFB347', '#3ABEFF', '#4CAF50'];
+  const strokeColors = ['#6366f1', '#f59e0b', '#0ea5e9', '#10b981'];
 
   useEffect(() => {
     const handleClickOutside = () => setOpenActionId(null);
@@ -48,17 +49,17 @@ function TaskList({
   };
 
   const filtered = tasks.filter((task) => {
-  const monthNumber = monthMap[search];
+    const monthNumber = monthMap[search];
 
-  const matchesSearch =
-    !search ||
-    [
-      task.title?.toLowerCase(),
-      task.description?.toLowerCase(),
-      task.status?.toLowerCase(),
-      task.dueDate,
-    ].some((field) => field?.includes(search)) ||
-    (monthNumber && task.dueDate?.slice(5, 7) === monthNumber); // Check dueDate month
+    const matchesSearch =
+      !search ||
+      [
+        task.title?.toLowerCase(),
+        task.description?.toLowerCase(),
+        task.status?.toLowerCase(),
+        task.dueDate,
+      ].some((field) => field?.includes(search)) ||
+      (monthNumber && task.dueDate?.slice(5, 7) === monthNumber);
     if (search) return matchesSearch;
     return statuses.includes(task.status);
   });
@@ -73,12 +74,12 @@ function TaskList({
             className="flex items-center gap-x-2 cursor-pointer group"
           >
             <TaskIcon className="w-4 h-4" />
-            <p className="text-[#FF6767] text-sm font-medium group-hover:underline">Tasks</p>
+            <p className="text-indigo-500 dark:text-indigo-400 text-sm font-semibold group-hover:underline">Tasks</p>
           </div>
 
           <button
             onClick={() => onAddTaskClick?.()}
-            className="flex items-center gap-x-2 text-sm text-[#A1A3AB] hover:text-[#FF6767] transition-all"
+            className="flex items-center gap-x-2 text-sm text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-all"
           >
             <AddIcon className="w-4 h-4" />
             <span>Add Task</span>
@@ -86,103 +87,106 @@ function TaskList({
         </div>
       )}
 
-      {/* Loading, Empty, or Tasks */}
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-10 h-10 border-4 border-dashed border-[#FF9090] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-500 rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center">
-          <p className="text-gray-400 text-lg font-inter mb-2">No Tasks Found</p>
+          <p className="text-slate-400 dark:text-slate-500 text-lg font-inter mb-2">No Tasks Found</p>
           <button
             onClick={() => onAddTaskClick?.()}
-            className="text-[#FF6767] font-medium hover:underline mt-1"
+            className="text-indigo-500 dark:text-indigo-400 font-medium hover:underline mt-1"
           >
             + Add Task
           </button>
         </div>
       ) : (
-        <ul className="flex flex-col gap-4 w-full h-full overflow-y-auto pr-1 scrollbar-hide">
-        <AnimatePresence>
-          {filtered.map((task, index) => {
-            const stroke = strokeColors[index % strokeColors.length];
-            return (
-              <motion.li
-                key={task._id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                onClick={() => {
-                  if (isMobile) {
-                    navigate(`/viewtask/${task._id}`);
-                  } else {
-                    onTaskClick?.(task._id);
-                  }
-                }}
-                className={`cursor-pointer group p-4 rounded-xl border 
-                  border-[#A1A3AB] dark:border-[#444]
-                  bg-white dark:bg-[#1c1c1c]
-                  text-black dark:text-white 
-                  shadow transition-all duration-200 hover:shadow-lg hover:scale-[1.001] relative ${
-                    openActionId === task._id ? 'z-[60]' : 'z-10'
-                  }`}
-              >
-                {/* Top Row */}
-                <div className="flex justify-between items-start gap-2 flex-wrap">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <CircleIcon className="flex-shrink-0 mt-1 w-4 h-4" stroke={stroke} />
-                    <p
-                      className="font-inter text-base font-semibold truncate"
-                      title={task.title}
-                    >
-                      {task.title}
-                    </p>
+        <ul className="flex flex-col gap-3 w-full h-full overflow-y-auto pr-1 scrollbar-hide">
+          <AnimatePresence>
+            {filtered.map((task, index) => {
+              const stroke = strokeColors[index % strokeColors.length];
+              return (
+                <motion.li
+                  key={task._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => {
+                    if (isMobile) {
+                      navigate(`/viewtask/${task._id}`);
+                    } else {
+                      onTaskClick?.(task._id);
+                    }
+                  }}
+                  className={`cursor-pointer group p-4 rounded-xl border 
+                    border-slate-200 dark:border-slate-700
+                    bg-white dark:bg-slate-800
+                    text-slate-800 dark:text-slate-100 
+                    shadow-sm transition-all duration-200 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-800 hover:-translate-y-0.5 relative ${
+                      openActionId === task._id ? 'z-[60]' : 'z-10'
+                    }`}
+                >
+                  {/* Top Row */}
+                  <div className="flex justify-between items-start gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <CircleIcon className="flex-shrink-0 mt-1 w-4 h-4" stroke={stroke} />
+                      <p
+                        className="font-inter text-base font-semibold truncate"
+                        title={task.title}
+                      >
+                        {task.title}
+                      </p>
+                    </div>
+
+                    <div className="relative hidden sm:block flex-shrink-0">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenActionId((prev) => (prev === task._id ? null : task._id));
+                        }}
+                        className="hover:scale-110 transition-transform p-4 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
+                        type="button"
+                      >
+                        <OptionIcon />
+                      </button>
+
+                      {openActionId === task._id && (
+                        <div className="absolute z-50 right-0 mt-2">
+                          <Actions
+                            task={task}
+                            fetchTasksWithRetry={fetchTasksWithRetry}
+                            setEditTask={setEditTask}
+                            setShareTask={setShareTask}
+                            setNotification={setNotification}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Options */}
-                  <div className="relative hidden sm:block flex-shrink-0">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenActionId((prev) => (prev === task._id ? null : task._id));
-                      }}
-                      className="hover:scale-110 transition-transform p-4"
-                      type="button"
-                    >
-                      <OptionIcon />
-                    </button>
-
-                    {openActionId === task._id && (
-                      <div className="absolute z-50 right-0 mt-2">
-                        <Actions
-                          task={task}
-                          fetchTasksWithRetry={fetchTasksWithRetry}
-                          setEditTask={setEditTask}
-                          setShareTask={setShareTask}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-[#747474] dark:text-gray-400 text-sm mt-2 break-words line-clamp-2 overflow-hidden text-ellipsis">
-                  {task.description}
-                </p>
-
-                {/* Status + Due */}
-                <div className="flex justify-between items-center mt-3 text-xs">
-                  <p className="text-[#F21E1E] dark:text-red-400">
-                    <span className="text-black dark:text-white">Status:</span> {task.status}
+                  {/* Description */}
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 break-words line-clamp-2 overflow-hidden text-ellipsis">
+                    {task.description}
                   </p>
-                  <p className="text-[#A1A3AB] dark:text-gray-500">{getDueLabel(task.dueDate)}</p>
-                </div>
-              </motion.li>
-            );
-          })}
-        </AnimatePresence>
-      </ul>
+
+                  {/* Status + Due */}
+                  <div className="flex justify-between items-center mt-3 text-xs">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      task.status === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
+                      task.status === 'In Progress' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400' :
+                      'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                    }`}>
+                      {task.status}
+                    </span>
+                    <p className="text-slate-400 dark:text-slate-500">{getDueLabel(task.dueDate)}</p>
+                  </div>
+                </motion.li>
+              );
+            })}
+          </AnimatePresence>
+        </ul>
       )}
     </div>
   );

@@ -88,25 +88,24 @@ function Login() {
 
   return (
     <PageWrapper>
-      <div className="relative w-full h-screen bg-gray-100 dark:bg-[#0d0d0d] overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-center bg-cover z-0 opacity-70 dark:opacity-30" />
+      <div className="relative w-full h-screen bg-slate-50 dark:bg-slate-900 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-center bg-cover z-0 opacity-30 dark:opacity-15" />
 
-        {/* Overlay Image */}
+        {/* Decorative elements */}
+        <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl hidden sm:block" />
+        <div className="absolute bottom-20 left-20 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl hidden sm:block" />
+
         <div
-          className="absolute z-10 hidden sm:block bg-[url('/login_image.png')] bg-cover bg-center opacity-75"
+          className="absolute z-10 hidden sm:block bg-[url('/login_image.png')] bg-cover bg-center opacity-60"
           style={{ width: '50vw', height: '50vw', top: '40vh', left: '50vw' }}
         />
 
-        {/* Main Content */}
         <div className="relative z-10 flex flex-col h-full px-4 sm:px-8 justify-start pt-[20vh]">
-          <h1 className="text-[#212427] dark:text-white sm:ml-4.5 font-montserrat text-3xl sm:text-4xl font-bold text-center sm:text-left">
+          <h1 className="text-slate-800 dark:text-white sm:ml-4.5 font-montserrat text-3xl sm:text-4xl font-bold text-center sm:text-left">
             Sign In
           </h1>
 
-          {/* Inputs */}
-          <div className="flex flex-col gap-6 mt-6 items-center sm:items-start w-full max-w-xl">
-            {/* Username */}
+          <div className="flex flex-col gap-5 mt-6 items-center sm:items-start w-full max-w-xl">
             <div className="relative w-full px-4">
               <input
                 type="text"
@@ -114,17 +113,13 @@ function Login() {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Enter Username"
-                className="w-full h-14 pl-10 pr-4 rounded-md border border-[#565454] font-montserrat text-base font-medium
-                           placeholder:text-[#999] focus:outline-none focus:ring-2 focus:ring-[#FF9090]
-                           hover:border-[#FF9090] transition-colors duration-300
-                           dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#aaa] dark:border-[#888]"
+                className="RegisterInput"
               />
               <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
                 <UsernameIcon />
               </div>
             </div>
 
-            {/* Password */}
             <div className="relative w-full px-4">
               <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
                 <PasswordIcon />
@@ -135,10 +130,7 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter Password"
-                className="w-full h-14 pl-10 pr-14 rounded-md border border-[#565454] font-montserrat text-base font-medium
-                           placeholder:text-[#999] focus:outline-none focus:ring-2 focus:ring-[#FF9090]
-                           hover:border-[#FF9090] transition-colors duration-300
-                           dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#aaa] dark:border-[#888]"
+                className="RegisterInput"
               />
               <div
                 className="absolute inset-y-0 right-6 flex items-center cursor-pointer"
@@ -158,38 +150,35 @@ function Login() {
                 name="remember"
                 checked={formData.remember}
                 onChange={handleChange}
-                className="peer w-5 h-5 appearance-none border border-[#565454] rounded-sm bg-white
-                           dark:bg-[#1f1f1f] checked:bg-[#FF6767] transition-all duration-200 grid place-content-center"
+                className="peer w-5 h-5 appearance-none border border-slate-400 rounded-md bg-white
+                           dark:bg-slate-800 checked:bg-indigo-500 dark:checked:bg-indigo-500 transition-all duration-200 grid place-content-center"
               />
               <TickIcon />
-              <span className="ml-2 text-[#212427] dark:text-white font-montserrat text-base font-medium">
+              <span className="ml-2 text-slate-700 dark:text-white font-montserrat text-base font-medium">
                 Remember me
               </span>
             </label>
           </div>
 
-          {/* Error Message */}
           {loginError && (
             <div className="px-4 text-red-500 dark:text-red-400 mt-3 text-sm font-medium">{loginError}</div>
           )}
 
-          {/* Login Button */}
           <div className="mt-6 px-4">
             <button
               onClick={handleLogin}
-              className="text-white bg-[#FF9090] text-base w-full sm:w-60 h-14 font-medium rounded
-                         transition-all duration-300 ease-in-out hover:bg-[#FF6F6F] hover:shadow-lg active:scale-95"
+              className="text-white bg-indigo-500 text-base w-full sm:w-60 h-14 font-semibold rounded-xl
+                         transition-all duration-300 ease-in-out hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/25 active:scale-95"
             >
               Login
             </button>
           </div>
 
-          {/* Register Redirect */}
           <div className="mt-4 px-4 text-center sm:text-left">
-            <p className="text-[#212427] dark:text-white font-montserrat text-base font-medium">
-              Don’t have an account?{' '}
+            <p className="text-slate-700 dark:text-white font-montserrat text-base font-medium">
+              Don't have an account?{' '}
               <span
-                className="text-[#008BD9] dark:text-[#4fbaff] hover:underline cursor-pointer transition-colors"
+                className="text-indigo-500 dark:text-indigo-400 hover:underline cursor-pointer transition-colors"
                 onClick={() => navigate('/register')}
               >
                 Create One

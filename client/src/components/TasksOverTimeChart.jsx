@@ -18,7 +18,7 @@ const formatLabel = (dateStr) =>
   new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
 const TasksOverTimeChart = ({ tasks }) => {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = document.documentElement.classList.contains('dark');
   const chartData = useMemo(() => {
     const createdMap = {}, completedMap = {}, inProgressMap = {};
 
@@ -47,9 +47,9 @@ const TasksOverTimeChart = ({ tasks }) => {
         {
           label: 'Created',
           data: allKeys.map(k => createdMap[k] || 0),
-          borderColor: '#FF9F40',
-          backgroundColor: 'rgba(255, 159, 64, 0.15)',
-          pointBackgroundColor: '#FF9F40',
+          borderColor: '#f97316',
+          backgroundColor: 'rgba(249, 115, 22, 0.1)',
+          pointBackgroundColor: '#f97316',
           pointRadius: 4,
           fill: true,
           tension: 0.4,
@@ -57,9 +57,9 @@ const TasksOverTimeChart = ({ tasks }) => {
         {
           label: 'In Progress',
           data: allKeys.map(k => inProgressMap[k] || 0),
-          borderColor: '#36A2EB',
-          backgroundColor: 'rgba(54, 162, 235, 0.15)',
-          pointBackgroundColor: '#36A2EB',
+          borderColor: '#0ea5e9',
+          backgroundColor: 'rgba(14, 165, 233, 0.1)',
+          pointBackgroundColor: '#0ea5e9',
           pointRadius: 4,
           fill: true,
           tension: 0.4,
@@ -67,9 +67,9 @@ const TasksOverTimeChart = ({ tasks }) => {
         {
           label: 'Completed',
           data: allKeys.map(k => completedMap[k] || 0),
-          borderColor: '#4CAF50',
-          backgroundColor: 'rgba(76, 175, 80, 0.15)',
-          pointBackgroundColor: '#4CAF50',
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          pointBackgroundColor: '#10b981',
           pointRadius: 4,
           fill: true,
           tension: 0.4,
@@ -84,13 +84,13 @@ const TasksOverTimeChart = ({ tasks }) => {
     interaction: { mode: 'index', intersect: false },
     plugins: {
       tooltip: {
-        backgroundColor: isDark ? '#1e1e1e' : '#fff',
-        titleColor: isDark ? '#fff' : '#333',
-        bodyColor: isDark ? '#ccc' : '#555',
-        borderColor: isDark ? '#444' : '#ccc',
+        backgroundColor: isDark ? '#1e293b' : '#fff',
+        titleColor: isDark ? '#f1f5f9' : '#334155',
+        bodyColor: isDark ? '#cbd5e1' : '#64748b',
+        borderColor: isDark ? '#334155' : '#e2e8f0',
         borderWidth: 1,
-        cornerRadius: 6,
-        padding: 10,
+        cornerRadius: 10,
+        padding: 12,
         titleFont: { weight: 'bold' },
         bodyFont: { size: 12 },
         boxPadding: 6,
@@ -102,7 +102,7 @@ const TasksOverTimeChart = ({ tasks }) => {
           usePointStyle: true,
           pointStyle: 'circle',
           padding: 16,
-          color: isDark ? '#f0f0f0' : '#333',
+          color: isDark ? '#e2e8f0' : '#334155',
         },
       },
     },
@@ -111,14 +111,14 @@ const TasksOverTimeChart = ({ tasks }) => {
         title: {
           display: true,
           text: 'Date',
-          font: { size: 14 },
-          color: isDark ? '#ffffff' : '#333',
+          font: { size: 13 },
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         ticks: {
-          color: isDark ? '#dddddd' : '#333',
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         grid: {
-          color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+          color: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.04)',
           lineWidth: 1,
         },
       },
@@ -127,17 +127,17 @@ const TasksOverTimeChart = ({ tasks }) => {
         ticks: {
           stepSize: 1,
           precision: 0,
-          color: isDark ? '#dddddd' : '#333',
+          color: isDark ? '#94a3b8' : '#64748b',
           callback: (value) => Number.isInteger(value) ? value : null,
         },
         title: {
           display: true,
           text: 'Tasks',
-          font: { size: 14 },
-          color: isDark ? '#ffffff' : '#333',
+          font: { size: 13 },
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         grid: {
-          color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+          color: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.04)',
           lineWidth: 1,
         },
       },
@@ -145,7 +145,7 @@ const TasksOverTimeChart = ({ tasks }) => {
   };
 
   return (
-    <div className="w-full rounded-2xl bg-[#F5F8FF] dark:bg-[#1a1a1a] shadow-lg p-4 h-full transition hover:shadow-xl">
+    <div className="w-full rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 shadow-sm p-4 h-full transition-all hover:shadow-md">
       <Line data={chartData} options={options} />
     </div>
   );

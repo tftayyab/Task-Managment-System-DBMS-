@@ -17,7 +17,7 @@ const getTeamName = (teams, teamId) => {
 };
 
 const TasksPerTeamChart = ({ tasks, teams }) => {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = document.documentElement.classList.contains('dark');
 
   const chartData = useMemo(() => {
     const teamStatusMap = {};
@@ -52,19 +52,19 @@ const TasksPerTeamChart = ({ tasks, teams }) => {
         {
           label: 'Pending',
           data: pendingData,
-          backgroundColor: '#FFB347',
+          backgroundColor: '#f59e0b',
           borderRadius: 6,
         },
         {
           label: 'In Progress',
           data: inProgressData,
-          backgroundColor: '#3ABEFF',
+          backgroundColor: '#0ea5e9',
           borderRadius: 6,
         },
         {
           label: 'Completed',
           data: completedData,
-          backgroundColor: '#4CAF50',
+          backgroundColor: '#10b981',
           borderRadius: 6,
         },
       ],
@@ -81,17 +81,17 @@ const TasksPerTeamChart = ({ tasks, teams }) => {
           font: { family: 'Inter', size: 10 },
           boxWidth: 12,
           padding: 16,
-          color: isDark ? '#fff' : '#000',
+          color: isDark ? '#e2e8f0' : '#334155',
         },
       },
       tooltip: {
-        backgroundColor: isDark ? '#1e1e1e' : '#fff',
-        titleColor: isDark ? '#fff' : '#333',
-        bodyColor: isDark ? '#ccc' : '#555',
-        borderColor: isDark ? '#444' : '#ccc',
+        backgroundColor: isDark ? '#1e293b' : '#fff',
+        titleColor: isDark ? '#f1f5f9' : '#334155',
+        bodyColor: isDark ? '#cbd5e1' : '#64748b',
+        borderColor: isDark ? '#334155' : '#e2e8f0',
         borderWidth: 1,
-        cornerRadius: 6,
-        padding: 10,
+        cornerRadius: 10,
+        padding: 12,
         titleFont: { weight: 'bold' },
         bodyFont: { size: 12 },
         boxPadding: 6,
@@ -104,14 +104,14 @@ const TasksPerTeamChart = ({ tasks, teams }) => {
           display: true,
           text: 'Teams',
           font: { size: 10, family: 'Inter' },
-          color: isDark ? '#fff' : '#000',
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         ticks: {
           font: { family: 'Inter' },
-          color: isDark ? '#ccc' : '#000',
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         grid: {
-          color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+          color: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.04)',
           lineWidth: 1,
         },
       },
@@ -122,16 +122,16 @@ const TasksPerTeamChart = ({ tasks, teams }) => {
           stepSize: 1,
           precision: 0,
           font: { family: 'Inter' },
-          color: isDark ? '#ccc' : '#000',
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         title: {
           display: true,
           text: 'Tasks',
           font: { size: 10, family: 'Inter' },
-          color: isDark ? '#fff' : '#000',
+          color: isDark ? '#94a3b8' : '#64748b',
         },
         grid: {
-          color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+          color: isDark ? 'rgba(148, 163, 184, 0.08)' : 'rgba(0,0,0,0.04)',
           lineWidth: 1,
         },
       },
@@ -139,7 +139,7 @@ const TasksPerTeamChart = ({ tasks, teams }) => {
   };
 
   return (
-    <div className="w-full sm:w-[22rem] rounded-2xl bg-[#F5F8FF] dark:bg-[#1a1a1a] shadow-lg p-4 flex flex-col transition hover:shadow-xl hover:scale-[1.01]">
+    <div className="w-full sm:w-[22rem] rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 shadow-sm p-4 flex flex-col transition-all hover:shadow-md">
       <div className="w-full h-56 sm:h-full">
         <Bar data={chartData} options={options} />
       </div>

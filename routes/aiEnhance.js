@@ -24,16 +24,47 @@ router.post(
 
     const makePrompt = (type, input) => {
       if (type === 'title') {
-        return `You are being used as an API inside a task management app.
-                Rewrite this task title to be clear, specific, and under 10 words. Avoid robotic language. Return only the improved title, no explanation.
-                Input:
-"${input}"`;
-      } else {
-        return `Rewrite this task description to sound more helpful and clear. Use full sentences and organize info naturally. Bullet points are allowed.
-                Just return the improved task description. Do not include explanations, introductions, or extra text.
-                Input:
-"${input}"`;
+        return [
+          'You are an assistant for a task management app.',
+          'Rewrite the task title to be concise, actionable, and human.',
+          'Rules:',
+          '- Keep it between 4 and 10 words.',
+          '- Keep the original intent.',
+          '- Use plain language.',
+          '- Do NOT add quotes, bullets, labels, markdown, or explanations.',
+          '- Return exactly one line: only the improved title.',
+          `Input: "${input}"`,
+        ].join('\n');
       }
+
+      return [
+        'You are an assistant for a task management app.',
+        'Rewrite the task description so it is clear, practical, and easy to execute.',
+        'Rules:',
+        '- Keep the same intent and important details.',
+        '- Use 2-5 short sentences.',
+        '- Keep it concise and readable.',
+        '- Do NOT add headings, labels, markdown, or explanations.',
+        '- Return only the improved description text.',
+        `Input: "${input}"`,
+      ].join('\n');
+    };
+
+    const sanitizeOutput = (text, type) => {
+      if (!text || typeof text !== 'string') return '';
+
+      let cleaned = text.trim();
+      cleaned = cleaned.replace(/^```[\s\S]*?\n/, '').replace(/```$/, '').trim();
+      cleaned = cleaned.replace(/^["']|["']$/g, '').trim();
+
+      if (type === 'title') {
+        cleaned = cleaned.split('\n').find((line) => line.trim()) || cleaned;
+        cleaned = cleaned.replace(/^[-*]\s*/, '').trim();
+        const words = cleaned.split(/\s+/).filter(Boolean);
+        if (words.length > 10) cleaned = words.slice(0, 10).join(' ');
+      }
+
+      return cleaned;
     };
 
     const sendToGemini = async (text) => {
@@ -46,8 +77,9 @@ router.post(
             },
           ],
           generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 200,
+            temperature: 0.35,
+            topP: 0.9,
+            maxOutputTokens: 180,
           },
         }
       );
@@ -56,10 +88,12 @@ router.post(
 
     const result = {};
     if (title && title.length >= 3) {
-      result.enhancedTitle = await sendToGemini(makePrompt('title', title));
+      const enhancedTitle = await sendToGemini(makePrompt('title', title));
+      result.enhancedTitle = sanitizeOutput(enhancedTitle, 'title');
     }
     if (description && description.length >= 3) {
-      result.enhancedDescription = await sendToGemini(makePrompt('description', description));
+      const enhancedDescription = await sendToGemini(makePrompt('description', description));
+      result.enhancedDescription = sanitizeOutput(enhancedDescription, 'description');
     }
 
     res.json(result);

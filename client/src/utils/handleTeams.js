@@ -138,7 +138,7 @@ export const handleAddToTeam = async ({
 
     if (fetchTasksWithRetry) fetchTasksWithRetry();
     if (onClose) onClose();
-    if (setNotification) setNotification("🔗 Task shared to team");
+    if (setNotification) setNotification(`Task shared to "${team.teamName}"`);
   } catch (err) {
     console.error('❌ Failed to share task with team:', err);
     if (setNotification) setNotification("❌ Failed to share task");

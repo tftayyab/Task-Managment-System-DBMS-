@@ -7,7 +7,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "cd client && npm run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed:demo": "node seed-demo.js"
   },
   "repository": {
     "type": "git",

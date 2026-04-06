@@ -27,6 +27,7 @@ export const handleEnhanceField = async ({
   setShowReload,
   setLoadingTitle,
   setLoadingDesc,
+  setNotification,
 }) => {
   const localKey = `original${field.charAt(0).toUpperCase() + field.slice(1)}`;
 
@@ -35,7 +36,12 @@ export const handleEnhanceField = async ({
   }
 
   const original = localStorage.getItem(localKey);
-  if (!original || original.length < 3) return;
+  if (!original || original.length < 3) {
+    if (setNotification) {
+      setNotification(`Please enter at least 3 characters for ${field} before enhancing.`);
+    }
+    return;
+  }
 
   if (field === 'title') setLoadingTitle(true);
   else setLoadingDesc(true);
@@ -51,10 +57,17 @@ export const handleEnhanceField = async ({
     if (improved && typeof improved === 'string') {
       animateTyping(improved, field, setNewTask);
       setShowReload((prev) => ({ ...prev, [field]: true }));
+      if (setNotification) {
+        setNotification(`${field === 'title' ? 'Title' : 'Description'} enhanced with AI`);
+      }
+    } else if (setNotification) {
+      setNotification(`AI could not improve the ${field}. Try again.`);
     }
   } catch (err) {
-    alert('AI Enhance failed. Check console for details.');
     console.error(err);
+    if (setNotification) {
+      setNotification(`AI enhancement failed for ${field}. Please try again.`);
+    }
   } finally {
     if (field === 'title') setLoadingTitle(false);
     else setLoadingDesc(false);
