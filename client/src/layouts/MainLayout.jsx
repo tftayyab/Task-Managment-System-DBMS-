@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader';
 import Menu from '../components/Menu';
 import Notification from '../components/notification';
 import useSocketNotifications from '../hooks/useSocketNotifications';
+import useIsMobile from '../utils/useScreenSize';
 
 function MainLayout() {
   const [searchTerm, setSearchTerm] = useState('');
