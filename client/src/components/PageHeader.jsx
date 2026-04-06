@@ -11,8 +11,6 @@ const PageHeader = ({
   setSearchTerm = () => {},
   isMenuOpen = false,
   setIsMenuOpen = () => {},
-  toggleDarkMode = () => {},
-  darkMode = false,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -58,8 +56,6 @@ const PageHeader = ({
                   setShowMenu(false);
                   setIsMenuOpen(false);
                 }}
-                toggleDarkMode={toggleDarkMode}
-                darkMode={darkMode}
               />
             </motion.div>
           </>
@@ -77,20 +73,12 @@ const PageHeader = ({
             <MenuIcon />
           </button>
 
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-inter font-bold text-center sm:text-left sm:flex-1 max-w-[calc(100%-7rem)] sm:max-w-none truncate px-1 sm:px-0 min-w-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-inter font-bold text-center sm:text-left sm:flex-1 max-w-[calc(100%-4.5rem)] sm:max-w-none truncate px-1 sm:px-0 min-w-0">
             <span className="text-indigo-500 dark:text-indigo-400">{redTitle}</span>
             <span className="text-slate-800 dark:text-slate-100">{blackTitle}</span>
           </h1>
 
           <div className="absolute right-0 top-1/2 -translate-y-1/2 sm:static sm:translate-y-0 flex items-center gap-2 sm:gap-3 shrink-0 z-10">
-            <button
-              type="button"
-              onClick={toggleDarkMode}
-              className="sm:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200"
-              aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              <span className="text-lg leading-none">{darkMode ? '☀️' : '🌙'}</span>
-            </button>
             <div className="hidden sm:block text-right whitespace-nowrap text-xs sm:text-sm">
               <p className="text-slate-700 dark:text-slate-200 font-semibold">{day}</p>
               <p className="text-indigo-500 dark:text-indigo-400 font-medium">{date}</p>

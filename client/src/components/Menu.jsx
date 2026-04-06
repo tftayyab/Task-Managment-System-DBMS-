@@ -8,7 +8,7 @@ import {
 } from './svg';
 import { handleLogout } from '../utils/handleTasks';
 
-function Menu({ onClose, toggleDarkMode = () => {}, darkMode = false }) {
+function Menu({ onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [username, setUsername] = useState('');
@@ -110,15 +110,7 @@ function Menu({ onClose, toggleDarkMode = () => {}, darkMode = false }) {
         </nav>
       </div>
 
-      <div className="p-4 sm:p-6 border-t border-white/10 shrink-0 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-2 bg-slate-950/90 sm:bg-transparent">
-        <button
-          type="button"
-          onClick={toggleDarkMode}
-          className="flex items-center gap-3 px-4 py-3 sm:py-2.5 w-full rounded-2xl sm:rounded-lg text-sm font-medium text-slate-200 hover:bg-white/10 transition-all duration-200"
-        >
-          <span className="text-lg leading-none">{darkMode ? '☀️' : '🌙'}</span>
-          <span>{darkMode ? 'Light mode' : 'Dark mode'}</span>
-        </button>
+      <div className="p-4 sm:p-6 border-t border-white/10 shrink-0 pb-[max(1rem,env(safe-area-inset-bottom))] bg-slate-950/90 sm:bg-transparent">
         <button
           type="button"
           onClick={() => handleLogout(navigate)}

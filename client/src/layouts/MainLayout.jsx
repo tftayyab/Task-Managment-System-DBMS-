@@ -8,9 +8,6 @@ function MainLayout() {
   const [searchTerm, setSearchTerm] = useState('');
   const [notification, setNotification] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('darkMode') === 'true';
-  });
 
   const location = useLocation();
   const path = location.pathname;
@@ -28,19 +25,6 @@ function MainLayout() {
       setSearchTerm('');
     }
   }, [location]);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', darkMode);
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-  };
 
   const shouldShowHeader = !['/', '/login', '/register'].includes(path);
 
@@ -69,7 +53,7 @@ function MainLayout() {
 
       {shouldShowHeader && (
         <aside className="hidden sm:flex fixed left-0 top-0 h-full w-64 z-40">
-          <Menu toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+          <Menu />
         </aside>
       )}
 
@@ -82,8 +66,6 @@ function MainLayout() {
             setSearchTerm={setSearchTerm}
             isMenuOpen={isMenuOpen}
             setIsMenuOpen={setIsMenuOpen}
-            toggleDarkMode={toggleDarkMode}
-            darkMode={darkMode}
           />
         )}
 

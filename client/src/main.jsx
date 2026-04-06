@@ -4,12 +4,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import MainLayout from './layouts/MainLayout';
 
+if (typeof document !== 'undefined') {
+  document.documentElement.classList.remove('dark');
+}
 if (typeof localStorage !== 'undefined') {
-  if (localStorage.getItem('darkMode') === 'true') {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
+  localStorage.removeItem('darkMode');
 }
 
 const Home = lazy(() => import('./pages/Home'));
