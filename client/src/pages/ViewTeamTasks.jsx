@@ -70,7 +70,7 @@ function ViewTeamTasks() {
 
   return (
     <motion.div
-      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -99,7 +99,7 @@ function ViewTeamTasks() {
               </div>
             ) : (
               selectedTaskId && (
-                <div className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900/50 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden min-h-[min(32rem,70vh)]">
+                <div className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900/50 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
                   <Tasks
                     tasks={tasks}
                     task_id={selectedTaskId}

@@ -83,7 +83,7 @@ const TaskStatusCard = ({ tasks }) => {
   const getPercent = (count) => Math.round((count / total) * 100);
 
   return (
-    <div className="w-full sm:w-[22rem] rounded-2xl bg-slate-50 dark:bg-slate-900/50 shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-y-4 transition-all hover:shadow-md text-slate-800 dark:text-slate-100">
+    <div className="w-full rounded-2xl bg-slate-50 dark:bg-slate-900/50 shadow-sm border border-slate-200 dark:border-slate-700 p-3 sm:p-4 flex flex-col gap-y-3 sm:gap-y-4 transition-all hover:shadow-md text-slate-800 dark:text-slate-100 shrink-0">
       {/* Header */}
       <div className="flex items-center gap-x-2">
         <TaskIcon className="w-5 h-5 flex-shrink-0" />

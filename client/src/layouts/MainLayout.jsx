@@ -4,8 +4,6 @@ import PageHeader from '../components/PageHeader';
 import Menu from '../components/Menu';
 import Notification from '../components/notification';
 import useSocketNotifications from '../hooks/useSocketNotifications';
-import useIsMobile from '../utils/useScreenSize';
-
 function MainLayout() {
   const [searchTerm, setSearchTerm] = useState('');
   const [notification, setNotification] = useState(null);
@@ -14,7 +12,6 @@ function MainLayout() {
     return localStorage.getItem('darkMode') === 'true';
   });
 
-  const isMobile = useIsMobile();
   const location = useLocation();
   const path = location.pathname;
   const navigate = useNavigate();
@@ -59,7 +56,13 @@ function MainLayout() {
   const { red, black } = getTitles(path);
 
   return (
-    <div className="min-h-screen min-h-[100dvh] flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+    <div
+      className={`flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 ${
+        shouldShowHeader
+          ? 'h-[100dvh] max-h-[100dvh] min-h-0 overflow-hidden'
+          : 'min-h-screen min-h-[100dvh]'
+      }`}
+    >
       {notification && (
         <Notification message={notification} onClose={() => setNotification(null)} />
       )}
@@ -70,7 +73,7 @@ function MainLayout() {
         </aside>
       )}
 
-      <div className={`flex flex-col flex-1 min-h-0 ${shouldShowHeader ? 'sm:ml-64' : ''}`}>
+      <div className={`flex flex-col flex-1 min-h-0 overflow-hidden ${shouldShowHeader ? 'sm:ml-64' : ''}`}>
         {shouldShowHeader && (
           <PageHeader
             redTitle={red}
@@ -84,7 +87,11 @@ function MainLayout() {
           />
         )}
 
-        <main className="flex-1 min-h-0 w-full overflow-x-hidden overflow-y-auto">
+        <main
+          className={`flex-1 min-h-0 w-full overflow-x-hidden flex flex-col ${
+            shouldShowHeader ? 'overflow-y-hidden' : 'overflow-y-auto'
+          }`}
+        >
           <Outlet
             context={{
               searchTerm,

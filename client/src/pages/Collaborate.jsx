@@ -64,7 +64,7 @@ function Collaborate() {
 
   return (
     <motion.div
-      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -75,10 +75,10 @@ function Collaborate() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col gap-4 lg:flex-row lg:gap-6 transition-all duration-300 overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col gap-4 lg:flex-row lg:gap-6 transition-all duration-300 overflow-hidden min-h-0">
 
           {/* Team List */}
-          <div className="order-1 w-full lg:w-1/2 min-h-[240px] lg:min-h-0 lg:h-auto bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
+          <div className="order-1 w-full lg:w-1/2 flex-1 min-h-[200px] lg:min-h-0 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
             <TeamList
               teams={teams}
               onTeamClick={(teamId) => {
@@ -96,7 +96,7 @@ function Collaborate() {
           </div>
 
           {/* Task List */}
-          <div className="order-2 w-full lg:w-1/2 min-h-[240px] lg:min-h-0 flex-1 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
+          <div className="order-2 w-full lg:w-1/2 flex-1 min-h-[200px] lg:min-h-0 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 sm:p-6 overflow-y-auto scrollbar-hide">
             <TaskList
               tasks={filteredTasks}
               statuses={["Pending", "In Progress", "Completed"]}

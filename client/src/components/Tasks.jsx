@@ -43,13 +43,13 @@ function Tasks({
   );
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 w-full">
+    <div className="flex flex-col flex-1 min-h-0 w-full h-full">
       {loading ? (
         <div className="flex-1 flex items-center justify-center py-10 min-h-[12rem]">
           <div className="w-10 h-10 border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-500 rounded-full animate-spin" />
         </div>
       ) : (
-        <ul className="flex flex-col gap-4 w-full flex-1 min-h-0 overflow-y-auto pr-1 pb-3 scrollbar-hide">
+        <ul className="flex flex-col gap-4 w-full flex-1 min-h-0 overflow-y-auto pr-1 pb-1 scrollbar-hide">
           <AnimatePresence>
             {filtered.map((task) => (
               <motion.li
@@ -59,12 +59,12 @@ function Tasks({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.12 }}
                 onClick={() => navigate(`/viewtask/${task._id}`)}
-                className={`group relative rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-shadow duration-150 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 cursor-pointer flex flex-col w-full ${
+                className={`group relative rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-shadow duration-150 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 cursor-pointer flex flex-col w-full flex-1 min-h-0 overflow-hidden ${
                   isMobile ? 'min-h-[min(72vh,36rem)]' : ''
                 }`}
               >
-                <div className="p-4 flex flex-col flex-1 min-h-0">
-                  <p className="text-slate-800 dark:text-white font-inter text-base font-semibold break-words">
+                <div className="p-4 flex flex-col flex-1 min-h-0 overflow-hidden">
+                  <p className="text-slate-800 dark:text-white font-inter text-base font-semibold line-clamp-2 shrink-0 pr-1">
                     {task.title}
                   </p>
 
@@ -86,16 +86,14 @@ function Tasks({
                     </p>
                   </div>
 
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 break-words flex-1 min-h-[4rem] overflow-y-auto">
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 flex-1 min-h-0 overflow-y-auto scrollbar-hide break-words">
                     {task.description}
                   </p>
                 </div>
 
                 <div
-                  className={`flex flex-row justify-center items-center gap-3 p-4 border-slate-200 dark:border-slate-600 shrink-0 ${
-                    isMobile
-                      ? 'mt-auto border-t bg-slate-50 dark:bg-slate-900/90 rounded-b-[inherit]'
-                      : 'sm:absolute sm:bottom-3 sm:right-3 sm:border-0 sm:bg-transparent sm:p-2 sm:mt-0'
+                  className={`flex flex-row justify-center items-center gap-3 px-4 py-3 border-t border-slate-200 dark:border-slate-600 shrink-0 bg-slate-50/90 dark:bg-slate-900/90 ${
+                    isMobile ? '' : ''
                   }`}
                   onClick={(e) => e.stopPropagation()}
                 >

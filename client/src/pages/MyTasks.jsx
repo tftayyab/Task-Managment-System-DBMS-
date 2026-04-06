@@ -68,7 +68,7 @@ function MyTasks() {
 
   return (
     <motion.div
-      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -99,9 +99,9 @@ function MyTasks() {
             />
           </div>
 
-          {/* Task Preview */}
-          <div className="order-1 md:order-2 w-full md:w-[min(28rem,100%)] flex-shrink-0 flex flex-col gap-4 mt-2 md:mt-0">
-            <div className="hidden md:flex md:flex-col md:min-h-0 md:h-[min(32rem,70vh)] bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-y-auto scrollbar-hide">
+          {/* Task Preview — fills remaining viewport height; body scrolls inside */}
+          <div className="order-1 md:order-2 w-full md:w-[min(28rem,42%)] md:max-w-md flex-shrink-0 flex flex-col gap-4 mt-2 md:mt-0 min-h-0 md:flex-1">
+            <div className="hidden md:flex md:flex-1 md:min-h-0 md:flex-col bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden scrollbar-hide">
               {selectedTaskId ? (
                 <Tasks
                   tasks={tasks}

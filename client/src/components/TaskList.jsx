@@ -128,25 +128,25 @@ function TaskList({
                       openActionId === task._id ? 'z-[200]' : 'z-[1]'
                     }`}
                 >
-                  {/* Top Row */}
-                  <div className="flex justify-between items-start gap-2 flex-wrap">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                  {/* Top Row: grid keeps title from flowing under the ⋮ control */}
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-2 gap-y-1 items-start">
+                    <div className="flex items-start gap-2 min-w-0">
                       <CircleIcon className="flex-shrink-0 mt-1 w-4 h-4" stroke={stroke} />
                       <p
-                        className="font-inter text-base font-semibold truncate"
+                        className="font-inter text-base font-semibold line-clamp-2 break-words min-w-0"
                         title={task.title}
                       >
                         {task.title}
                       </p>
                     </div>
 
-                    <div className="relative hidden sm:block flex-shrink-0">
+                    <div className="relative hidden sm:block flex-shrink-0 z-[5]">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setOpenActionId((prev) => (prev === task._id ? null : task._id));
                         }}
-                        className="hover:scale-110 transition-transform p-4 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
+                        className="hover:scale-110 transition-transform p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg -mr-1"
                         type="button"
                       >
                         <OptionIcon />
@@ -166,8 +166,8 @@ function TaskList({
                     </div>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 break-words line-clamp-2 overflow-hidden text-ellipsis">
+                  {/* Description — reserve horizontal space; ellipsis when long */}
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 min-w-0 line-clamp-2 break-words">
                     {task.description}
                   </p>
 

@@ -16,7 +16,7 @@ const getTeamName = (teams, teamId) => {
   return team ? team.teamName : 'Unknown';
 };
 
-const TasksPerTeamChart = ({ tasks, teams }) => {
+const TasksPerTeamChart = ({ tasks, teams, fillHeight = false }) => {
   const isDark = document.documentElement.classList.contains('dark');
 
   const chartData = useMemo(() => {
@@ -139,8 +139,16 @@ const TasksPerTeamChart = ({ tasks, teams }) => {
   };
 
   return (
-    <div className="w-full max-w-full min-w-0 overflow-x-auto rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 shadow-sm p-3 sm:p-4 flex flex-col transition-shadow hover:shadow-md">
-      <div className="min-w-[280px] w-full h-52 sm:h-56 md:h-64">
+    <div
+      className={`w-full max-w-full min-w-0 overflow-x-auto rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 shadow-sm p-3 sm:p-4 flex flex-col transition-shadow hover:shadow-md ${
+        fillHeight ? 'flex-1 min-h-0 h-full' : ''
+      }`}
+    >
+      <div
+        className={`min-w-[280px] w-full relative ${
+          fillHeight ? 'flex-1 min-h-[140px] h-full' : 'h-52 sm:h-56 md:h-64'
+        }`}
+      >
         <Bar data={chartData} options={options} />
       </div>
     </div>

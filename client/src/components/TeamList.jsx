@@ -87,23 +87,22 @@ function TeamList({
                     openActionId === team._id ? 'z-[200]' : 'z-[1]'
                   }`}
                 >
-                  {/* Top Row */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-2 gap-y-1 items-start">
+                    <div className="flex items-start gap-2 min-w-0">
                       <CircleIcon className="flex-shrink-0 mt-1 w-4 h-4" stroke={stroke} />
-                      <p className="text-slate-800 dark:text-white font-inter text-base font-semibold truncate">
+                      <p className="text-slate-800 dark:text-white font-inter text-base font-semibold line-clamp-2 break-words min-w-0">
                         {team.teamName || 'Unnamed Team'}
                       </p>
                     </div>
 
-                    <div className="relative hidden sm:block">
+                    <div className="relative hidden sm:block flex-shrink-0 z-[5]">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setOpenActionId(prev => (prev === team._id ? null : team._id));
                         }}
-                        className="hover:scale-110 transition-transform p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
+                        className="hover:scale-110 transition-transform p-2 -mr-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
                       >
                         <OptionIcon />
                       </button>
@@ -123,13 +122,12 @@ function TeamList({
                     </div>
                   </div>
 
-                  {/* Details */}
-                  <div className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                    <p>
+                  <div className="mt-2 text-sm text-slate-500 dark:text-slate-400 min-w-0 space-y-1">
+                    <p className="line-clamp-2 break-words">
                       <span className="font-medium text-slate-700 dark:text-slate-200">Owner:</span>{' '}
                       {team.owner}
                     </p>
-                    <p>
+                    <p className="line-clamp-2 break-words">
                       <span className="font-medium text-slate-700 dark:text-slate-200">Shared With:</span>{' '}
                       {team.shareWith?.length > 0 ? team.shareWith.join(', ') : 'No one yet'}
                     </p>

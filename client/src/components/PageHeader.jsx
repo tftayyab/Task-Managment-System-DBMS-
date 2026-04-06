@@ -47,11 +47,11 @@ const PageHeader = ({
             />
             <motion.div
               key="menu"
-              initial={{ x: -320, opacity: 0 }}
+              initial={{ x: '-100%', opacity: 0.98 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -320, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-              className="fixed top-0 left-0 z-50 sm:hidden w-[min(88vw,20rem)] h-full shadow-2xl"
+              exit={{ x: '-100%', opacity: 0.98 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+              className="fixed top-0 left-0 z-50 sm:hidden w-[min(92vw,20rem)] h-[100dvh] max-h-[100dvh] shadow-2xl pt-[env(safe-area-inset-top)]"
             >
               <Menu
                 onClose={() => {
@@ -67,22 +67,22 @@ const PageHeader = ({
       </AnimatePresence>
 
       <div className="flex flex-col gap-3 w-full max-w-[1600px] mx-auto">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+        <div className="relative flex items-center justify-center min-h-[2.75rem] sm:min-h-0 sm:justify-start sm:gap-4">
           <button
             type="button"
             onClick={handleMenuToggle}
-            className="sm:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 shrink-0"
+            className="absolute left-0 top-1/2 -translate-y-1/2 sm:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 shrink-0 z-10"
             aria-label="Open menu"
           >
             <MenuIcon />
           </button>
 
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-inter font-bold flex-1 min-w-0 text-center sm:text-left sm:pl-0 pl-10 sm:pl-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-inter font-bold text-center sm:text-left sm:flex-1 max-w-[calc(100%-7rem)] sm:max-w-none truncate px-1 sm:px-0 min-w-0">
             <span className="text-indigo-500 dark:text-indigo-400">{redTitle}</span>
             <span className="text-slate-800 dark:text-slate-100">{blackTitle}</span>
           </h1>
 
-          <div className="flex items-center gap-2 sm:gap-3 ml-auto sm:ml-0 shrink-0">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 sm:static sm:translate-y-0 flex items-center gap-2 sm:gap-3 shrink-0 z-10">
             <button
               type="button"
               onClick={toggleDarkMode}

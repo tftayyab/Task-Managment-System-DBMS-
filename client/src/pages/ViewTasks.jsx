@@ -74,7 +74,7 @@ function ViewTasks() {
 
   return (
     <motion.div
-      className="min-h-0 flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6"
+      className="min-h-0 flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 sm:p-6 overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -85,7 +85,7 @@ function ViewTasks() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col transition-all duration-300">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col transition-all duration-300 overflow-hidden">
           <div className="w-full flex flex-col flex-1 min-h-0 gap-4">
             {selectedTaskId && (
               <div className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900/50 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
