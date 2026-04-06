@@ -10,13 +10,7 @@ import useAuthToken from '../utils/useAuthToken';
 import { motion } from 'framer-motion';
 
 function MyTasks() {
-  const {
-    searchTerm,
-    setSearchTerm,
-    isMenuOpen,
-    setIsMenuOpen,
-    setNotification,
-  } = useOutletContext();
+  const { searchTerm, isMenuOpen, setNotification } = useOutletContext();
 
   const location = useLocation();
   const taskIdFromState = location.state?.taskId || null;
@@ -52,8 +46,7 @@ function MyTasks() {
 
   const fetchTasksWithRetry = async () => {
     try {
-      const username = localStorage.getItem('username');
-      const res = await api.get(`/tasks?username=${username}`);
+      const res = await api.get('/tasks');
       setTasks(res.data);
       setFilteredTasksList(res.data);
     } catch (err) {
@@ -86,9 +79,9 @@ function MyTasks() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.1 }}
       >
-        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6">
+        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6 w-full min-w-0">
           {!isMenuOpen && (
-            <div className="relative z-0 h-[75vh] border sm:h-[76vh] border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col sm:flex-row sm:gap-6 sm:w-[150vh] w-[40vh] bg-white dark:bg-[#1e1e1e] transition-all duration-300">
+            <div className="relative z-0 min-h-[min(75vh,680px)] sm:h-[76vh] w-full max-w-6xl border border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col sm:flex-row sm:gap-6 bg-white dark:bg-[#1e1e1e] transition-all duration-300">
 
               {/* 🔶 Task List */}
               <div className="order-2 -mt-5 sm:mt-0 sm:order-1 sm:h-full flex-1 bg-[#F5F8FF] dark:bg-[#2a2a2a] rounded-xl p-6 overflow-y-auto scrollbar-hide">

@@ -32,11 +32,10 @@ const taskSchema = Joi.object({
   }),
 
   teamIds: Joi.array()
-    .items(Joi.string().pattern(/^[0-9a-fA-F]{24}$/))
+    .items(Joi.alternatives().try(Joi.number().integer().positive(), Joi.string().pattern(/^\d+$/)))
     .optional()
     .messages({
-      'array.base': 'Team IDs must be an array of MongoDB ObjectIds.',
-      'string.pattern.base': 'Each team ID must be a valid MongoDB ObjectId.',
+      'array.base': 'Team IDs must be an array of numeric IDs.',
     }),
 });
 

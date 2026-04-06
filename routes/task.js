@@ -1,174 +1,160 @@
-const express = require("express");
-const Task = require("../models/TaskMongoDB");
-const Team = require("../models/TeamMongoDB");
-const { validateTasks } = require("../validations/Tasksvalidation");
-const validateRequest = require("../middleware/validateRequest");
-const isValidObjectId = require("../utils/validateObjectId");
-const asyncWrapper = require("../middleware/asyncWrapper");
-const verifyToken = require("../middleware/verifyToken");
+const express = require('express');
+const taskRepo = require('../repositories/tasks');
+const teamRepo = require('../repositories/teams');
+const { validateTasks } = require('../validations/Tasksvalidation');
+const validateRequest = require('../middleware/validateRequest');
+const isValidIdParam = require('../utils/validateId');
+const asyncWrapper = require('../middleware/asyncWrapper');
+const verifyToken = require('../middleware/verifyToken');
 const { getIO } = require('../socket');
 
 const router = express.Router();
 router.use(verifyToken);
 
-// 📌 GET /tasks/:id - Get one task by ID
 router.get(
-  "/:id",
+  '/:id',
   asyncWrapper(async (req, res) => {
     const { id } = req.params;
-    const username = req.user.username; // ✅ get logged-in user
+    const username = req.user.username;
 
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid Task ID format" });
+    if (!isValidIdParam(id)) {
+      return res.status(400).json({ message: 'Invalid Task ID format' });
     }
 
-    const task = await Task.findById(id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    const task = await taskRepo.findById(Number(id));
+    if (!task) return res.status(404).json({ message: 'Task not found' });
 
-    // ✅ Only allow owner or shared user
     if (task.owner !== username && !task.shareWith.includes(username)) {
-      return res.status(403).json({ message: "You are not allowed to view this task" });
+      return res.status(403).json({ message: 'You are not allowed to view this task' });
     }
 
     res.json(task);
   })
 );
 
-
-// ✏️ PUT /tasks/:id - Update a task
 router.put(
-  "/:id",
+  '/:id',
   validateRequest(validateTasks),
   asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const username = req.user.username;
 
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid Task ID format" });
+    if (!isValidIdParam(id)) {
+      return res.status(400).json({ message: 'Invalid Task ID format' });
     }
 
-    const existingTask = await Task.findById(id);
+    const existingTask = await taskRepo.findById(Number(id));
     if (!existingTask) {
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
-    // ✅ Only owner can update
     if (existingTask.owner !== username) {
-      return res.status(403).json({ message: "You are not allowed to update this task" });
+      return res.status(403).json({ message: 'You are not allowed to update this task' });
     }
 
-    const { teamIds = [] } = req.validatedBody;
+    const { title, description, status, dueDate, teamIds = [] } = req.validatedBody;
 
     let shareWith = [];
     if (teamIds.length > 0) {
-      const teams = await Team.find({ _id: { $in: teamIds } });
+      const numericIds = teamIds.map((t) => Number(t)).filter((n) => !Number.isNaN(n));
+      const teams = await teamRepo.getTeamsByIds(numericIds);
       const members = teams.flatMap((team) => team.shareWith || []);
       shareWith = [...new Set(members)].filter((user) => user !== username);
     }
 
-    const { createdAt, ...rest } = req.validatedBody; // ✅ exclude createdAt from updates
-
-    const updatedTask = await Task.findByIdAndUpdate(
-      id,
-      {
-        ...rest,
-        teamIds,
-        shareWith,
-      },
-      { new: true }
+    const updatedTask = await taskRepo.updateTask(
+      Number(id),
+      username,
+      { title, description, status, dueDate },
+      teamIds,
+      shareWith
     );
 
-    res.json({ message: "Task updated", task: updatedTask });
+    res.json({ message: 'Task updated', task: updatedTask });
   })
 );
 
-
-// ✅ DELETE /tasks/:id - Only owner can delete
 router.delete(
-  "/:id",
+  '/:id',
   asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const username = req.user.username;
 
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid Task ID format" });
+    if (!isValidIdParam(id)) {
+      return res.status(400).json({ message: 'Invalid Task ID format' });
     }
 
-    const task = await Task.findById(id);
+    const task = await taskRepo.findById(Number(id));
     if (!task) {
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
     if (task.owner !== username) {
-      return res.status(403).json({ message: "You are not allowed to delete this task" });
+      return res.status(403).json({ message: 'You are not allowed to delete this task' });
     }
 
-    await Task.findByIdAndDelete(id);
-    res.json({ message: "Task deleted", task });
+    await taskRepo.deleteTask(Number(id), username);
+    res.json({ message: 'Task deleted', task });
   })
 );
 
-// 📤 PUT /tasks/:id/share - Share task with a team
 router.put(
-  "/:id/share",
+  '/:id/share',
   asyncWrapper(async (req, res) => {
     const taskId = req.params.id;
     const { teamName, usernames = [] } = req.body;
     const owner = req.user.username;
 
+    if (!isValidIdParam(taskId)) {
+      return res.status(400).json({ message: 'Invalid Task ID format' });
+    }
+
     if (!Array.isArray(usernames) || usernames.length > 5) {
-      return res.status(400).json({ message: "You can only add up to 5 users" });
+      return res.status(400).json({ message: 'You can only add up to 5 users' });
     }
 
-    if (!teamName || typeof teamName !== "string") {
-      return res.status(400).json({ message: "Team name is required" });
+    if (!teamName || typeof teamName !== 'string') {
+      return res.status(400).json({ message: 'Team name is required' });
     }
 
-    // 🔄 Upsert team info
-    const updatedTeam = await Team.findOneAndUpdate(
-      { owner, teamName },
+    const updatedTeam = await teamRepo.upsertTeamAddMembers(owner, teamName, usernames);
+
+    const task = await taskRepo.findById(Number(taskId));
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    const teamIdStr = String(updatedTeam._id);
+    const mergedTeamIds = [...new Set([...(task.teamIds || []).map(String), teamIdStr])];
+
+    const updatedTask = await taskRepo.updateTask(
+      Number(taskId),
+      owner,
       {
-        $set: { owner, teamName },
-        $addToSet: { shareWith: { $each: usernames } },
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        dueDate: task.dueDate,
       },
-      { upsert: true, new: true }
+      mergedTeamIds,
+      usernames
     );
 
-    const task = await Task.findById(taskId);
-    if (task) {
-      task.owner = owner;
-      task.shareWith = usernames;
+    const io = getIO();
 
-      // ✅ Add team ID to teamIds[] if not already present
-      if (!task.teamIds) task.teamIds = [];
-      const alreadyAdded = task.teamIds.some(
-        (id) => id.toString() === updatedTeam._id.toString()
-      );
-      if (!alreadyAdded) {
-        task.teamIds.push(updatedTeam._id);
-      }
-
-      await task.save();
-
-      // ✅ Emit notifications
-      const io = getIO();
-
-      // 1. Notify all usernames individually
-      usernames.forEach((username) => {
-        io.to(username).emit("task_created", {
-          message: `Task "${task.title}" was shared with you`,
-          teamId: updatedTeam._id.toString(),
-        });
+    usernames.forEach((uname) => {
+      io.to(uname).emit('task_created', {
+        message: `Task "${task.title}" was shared with you`,
+        teamId: updatedTeam._id,
       });
+    });
 
-      // 2. Notify the team room
-      io.to(updatedTeam._id.toString()).emit("team_updated", {
-        message: `Team "${updatedTeam.teamName}" has been updated`,
-        teamId: updatedTeam._id.toString(),
-      });
-    }
+    io.to(String(updatedTeam._id)).emit('team_updated', {
+      message: `Team "${updatedTeam.teamName}" has been updated`,
+      teamId: updatedTeam._id,
+    });
 
-    res.json({ message: "Team shared/updated", team: updatedTeam });
+    res.json({ message: 'Team shared/updated', team: updatedTeam, task: updatedTask });
   })
 );
 

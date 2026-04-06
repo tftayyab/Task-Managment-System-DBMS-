@@ -1,27 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import TaskStatusCard from '../components/TaskStatusCard';
 import api from '../api';
-import useIsMobile from '../utils/useScreenSize';
 import useAuthToken from '../utils/useAuthToken';
 import { motion } from 'framer-motion';
 import TasksOverTimeChart from '../components/TasksOverTimeChart';
 import TasksPerTeamChart from '../components/TasksPerTeamChart';
 
 function Dashboard() {
-  const {
-    searchTerm,
-    setSearchTerm,
-    isMenuOpen,
-    setIsMenuOpen,
-    setNotification,
-  } = useOutletContext();
+  const { isMenuOpen, setNotification } = useOutletContext();
 
   const [tasks, setTasks] = useState([]);
   const [teams, setTeams] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const isMobile = useIsMobile();
-  const navigate = useNavigate();
 
   useAuthToken();
 
@@ -31,12 +21,9 @@ function Dashboard() {
   }, []);
 
   const fetchDashboardData = async () => {
-    setLoading(true);
     try {
-      const username = localStorage.getItem('username');
-
-      // Fetch personal tasks
-      const tasksRes = await api.get(`/tasks?username=${username}`);
+      // Fetch personal tasks (auth from token)
+      const tasksRes = await api.get('/tasks');
       setTasks(tasksRes.data);
 
       // Fetch shared teams + tasks to get team info
@@ -45,8 +32,6 @@ function Dashboard() {
       setTeams(fetchedTeams);
     } catch (err) {
       console.error('❌ Failed to fetch dashboard data:', err.response?.data || err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -63,9 +48,9 @@ function Dashboard() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.1 }}
       >
-        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6">
+        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6 w-full min-w-0">
           {!isMenuOpen && (
-            <div className="relative z-0 border sm:h-[76vh] border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col sm:flex-row sm:gap-6 sm:w-[150vh] w-[40vh] bg-white dark:bg-[#1e1e1e] transition-all duration-300">
+            <div className="relative z-0 border min-h-[min(76vh,720px)] sm:h-[76vh] w-full max-w-6xl border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col sm:flex-row sm:gap-6 bg-white dark:bg-[#1e1e1e] transition-all duration-300">
               
               {/* Right side */}
               <div className="order-1 sm:order-2 w-full sm:w-[22rem] flex flex-col gap-6 mt-6 sm:mt-0">

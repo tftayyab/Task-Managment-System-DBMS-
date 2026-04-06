@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import TeamList from '../components/TeamList';
 import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
@@ -10,15 +10,8 @@ import useAuthToken from '../utils/useAuthToken';
 import { motion } from 'framer-motion';
 
 function Collaborate() {
-  const {
-    searchTerm,
-    setSearchTerm,
-    isMenuOpen,
-    setIsMenuOpen,
-    setNotification,
-  } = useOutletContext();
+  const { searchTerm, isMenuOpen, setNotification } = useOutletContext();
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [teams, setTeams] = useState([]);
@@ -83,9 +76,9 @@ function Collaborate() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.1 }}
       >
-        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6">
+        <div className="flex-1 flex justify-center sm:justify-end sm:mr-5 px-4 pb-6 w-full min-w-0">
           {!isMenuOpen && (
-            <div className="relative z-0 border h-[75vh] sm:h-[76vh] border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 sm:flex flex-col gap-y-5 sm:flex-row sm:gap-6 sm:w-[150vh] w-[40vh] bg-white dark:bg-[#1e1e1e] transition-all duration-300">
+            <div className="relative z-0 border min-h-[min(75vh,720px)] sm:h-[76vh] w-full max-w-6xl border-[rgba(161,163,171,0.63)] dark:border-gray-700 shadow-lg rounded-2xl p-4 flex flex-col gap-y-5 sm:flex-row sm:gap-6 bg-white dark:bg-[#1e1e1e] transition-all duration-300">
               
               {/* 🔹 Team List */}
               <div className="order-1 sm:h-full w-full h-full sm:w-1/2 bg-[#F5F8FF] dark:bg-[#2a2a2a] rounded-xl p-6 overflow-y-auto scrollbar-hide">
@@ -105,7 +98,7 @@ function Collaborate() {
               </div>
 
               {/* 🔸 Task List */}
-              <div className="order-2 hidden sm:block sm:h-full h-full w-full sm:w-1/2 bg-[#F5F8FF] dark:bg-[#2a2a2a] rounded-xl p-6 overflow-y-auto scrollbar-hide">
+              <div className="order-2 sm:order-2 min-h-[240px] sm:min-h-0 sm:h-full w-full sm:w-1/2 bg-[#F5F8FF] dark:bg-[#2a2a2a] rounded-xl p-6 overflow-y-auto scrollbar-hide">
                 <TaskList
                   tasks={filteredTasks}
                   statuses={["Pending", "In Progress", "Completed"]}

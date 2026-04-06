@@ -98,8 +98,8 @@ const PageHeader = ({
         </div>
 
         {/* Search & Date */}
-        <div className="flex sm:flex-row flex-col sm:gap-x-30 sm:items-end items-center gap-2 sm:mt-0 mt-2 w-full sm:w-auto">
-          <div className="w-full sm:w-[120vh] max-w-full px-2 sm:px-0">
+        <div className="flex sm:flex-row flex-col sm:gap-8 sm:items-end items-center gap-2 sm:mt-0 mt-2 w-full sm:w-auto">
+          <div className="w-full sm:max-w-md md:max-w-lg lg:max-w-xl px-2 sm:px-0">
             <div className="relative flex items-center w-full group">
               <SearchIcon className="absolute left-3 w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-[#FF6767]" />
               <input

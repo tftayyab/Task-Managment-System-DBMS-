@@ -8,6 +8,7 @@ import useIsMobile from '../utils/useScreenSize';
 function MainLayout() {
   const [searchTerm, setSearchTerm] = useState('');
   const [notification, setNotification] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('darkMode') === 'true';
   });
@@ -87,13 +88,22 @@ function MainLayout() {
           blackTitle={black}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
+          setIsMenuOpen={setIsMenuOpen}
           toggleDarkMode={toggleDarkMode}
           darkMode={darkMode}
         />
       )}
 
       <main className="flex-1">
-        <Outlet context={{ searchTerm, setSearchTerm, setNotification }} />
+        <Outlet
+          context={{
+            searchTerm,
+            setSearchTerm,
+            setNotification,
+            isMenuOpen,
+            setIsMenuOpen,
+          }}
+        />
       </main>
     </div>
   );

@@ -23,7 +23,7 @@ This is a **Task Management System** built during a software development interns
 ### Backend
 - **Node.js**  
 - **Express.js**  
-- **MongoDB**  
+- **MySQL** (e.g. Railway-hosted)  
 - **Joi** (Validation)  
 - **JWT** (Authentication)  
 - **Google Gemini** (Enhance Tasks with AI)
@@ -250,14 +250,23 @@ Powered by **Socket.IO**, the API:
        npm install
      ```
      
-3.**Create a .env file in the backend folder and add:**
+3.**Create a `.env` file in the backend folder and add:**
 
    ```bash
           PORT=3000
-          MONGO_URI= Your Mongodb atlas server link.
-          JWT_SECRET= Your secret keys.
-          JWT_REFRESH_SECRET= Your secret keys.
-          GEMINI_API_KEY= Your Gemini api keys
+          # Use either a single URL (Railway often provides this) or individual variables:
+          DATABASE_URL=mysql://USER:PASSWORD@HOST:PORT/DATABASE
+          # Optional if not using DATABASE_URL:
+          # MYSQL_HOST=
+          # MYSQL_PORT=3306
+          # MYSQL_USER=
+          # MYSQL_PASSWORD=
+          # MYSQL_DATABASE=
+          # Set MYSQL_SSL=true on Railway if the provider requires TLS (default in production).
+          # MYSQL_SSL=false
+          JWT_SECRET=your-access-token-secret
+          JWT_REFRESH_SECRET=your-refresh-token-secret
+          GEMINI_API_KEY=your-gemini-api-key
    ```
 
 4. **Create a .env file in the frontend folder and add:**

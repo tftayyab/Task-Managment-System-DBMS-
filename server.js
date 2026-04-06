@@ -2,30 +2,23 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
 const http = require('http');
-const socket = require('./socket'); // Socket.IO setup
+const socket = require('./socket');
+const { getPool } = require('./config/db');
 require('dotenv').config();
 
 // ========== MIDDLEWARE ==========
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://tf-task-management-system.netlify.app',
-  ],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      'http://localhost:5173',
+      'https://tf-task-management-system.netlify.app',
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
-
-// ========== DATABASE ==========
-const mongoURI = process.env.MONGO_URI;
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ MongoDB Atlas Connected'))
-.catch((err) => console.error('❌ MongoDB Connection Failed:', err));
 
 // ========== VIEW ENGINE ==========
 app.set('view engine', 'ejs');
@@ -41,7 +34,7 @@ const Edit = require('./routes/Edit');
 const AddTasks = require('./routes/AddTasks');
 const AuthRoutes = require('./routes/auth');
 const Teams = require('./routes/teams');
-const AiEnhance = require('./routes/aiEnhance'); // 🧠 AI Route
+const AiEnhance = require('./routes/aiEnhance');
 
 // ========== ROUTE MOUNTS ==========
 app.use('/tasks', Tasks);
@@ -54,19 +47,27 @@ app.use('/edit', Edit);
 app.use('/addtasks', AddTasks);
 app.use('/auth', AuthRoutes);
 app.use('/teams', Teams);
-app.use('/ai', AiEnhance); // 🧠 AI Task Enhancer
+app.use('/ai', AiEnhance);
 
 // ========== HOME PAGE ==========
-app.get("/", (req, res) => {
-  res.render("index");
+app.get('/', (req, res) => {
+  res.render('index');
 });
 
 // ========== SERVER & SOCKET ==========
 const server = http.createServer(app);
-const io = socket.init(server);
+socket.init(server);
 
-// ========== START SERVER ==========
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+
+getPool()
+  .then(() => {
+    console.log('✅ MySQL connected and schema ready');
+    server.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ MySQL connection failed:', err.message);
+    process.exit(1);
+  });
