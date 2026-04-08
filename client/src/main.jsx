@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import MainLayout from './layouts/MainLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 if (typeof document !== 'undefined') {
   document.documentElement.classList.remove('dark');
@@ -34,13 +35,34 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { path: '', element: <Suspense fallback={<PageFallback />}><Home /></Suspense> },
-      { path: 'dashboard', element: <Suspense fallback={<PageFallback />}><Dashboard /></Suspense> },
-      { path: 'mytasks', element: <Suspense fallback={<PageFallback />}><MyTasks /></Suspense> },
-      { path: 'viewtask/:id', element: <Suspense fallback={<PageFallback />}><ViewTasks /></Suspense> },
-      { path: 'viewteamtask/:id', element: <Suspense fallback={<PageFallback />}><ViewTeamTasks /></Suspense> },
-      { path: 'addtasks', element: <Suspense fallback={<PageFallback />}><AddTasks /></Suspense> },
-      { path: 'edit', element: <Suspense fallback={<PageFallback />}><Edit /></Suspense> },
-      { path: 'collaborate', element: <Suspense fallback={<PageFallback />}><Collaborate /></Suspense> },
+      {
+        path: 'dashboard',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><Dashboard /></Suspense></ProtectedRoute>,
+      },
+      {
+        path: 'mytasks',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><MyTasks /></Suspense></ProtectedRoute>,
+      },
+      {
+        path: 'viewtask/:id',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><ViewTasks /></Suspense></ProtectedRoute>,
+      },
+      {
+        path: 'viewteamtask/:id',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><ViewTeamTasks /></Suspense></ProtectedRoute>,
+      },
+      {
+        path: 'addtasks',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><AddTasks /></Suspense></ProtectedRoute>,
+      },
+      {
+        path: 'edit',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><Edit /></Suspense></ProtectedRoute>,
+      },
+      {
+        path: 'collaborate',
+        element: <ProtectedRoute><Suspense fallback={<PageFallback />}><Collaborate /></Suspense></ProtectedRoute>,
+      },
     ],
   },
   { path: '/login', element: <Suspense fallback={<PageFallback />}><Login /></Suspense> },
