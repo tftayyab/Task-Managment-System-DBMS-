@@ -107,6 +107,7 @@ function MyTasks() {
                   tasks={tasks}
                   task_id={selectedTaskId}
                   setEditTask={setEditTask}
+                  setShareTask={setShareTask}
                   setNotification={setNotification}
                   fetchTasksWithRetry={fetchTasksWithRetry}
                 />
