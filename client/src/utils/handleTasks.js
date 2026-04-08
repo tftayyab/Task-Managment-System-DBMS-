@@ -71,10 +71,7 @@ export const handleUpdate = async ({
 // 🚪 Handle logout
 export const handleLogout = async (navigate) => {
   try {
-    await fetch('http://localhost:3000/auth/logout', {
-      method: 'POST',
-      credentials: 'include',
-    });
+    await api.post('/auth/logout');
   } catch (err) {
     console.error("❌ Logout request failed:", err);
   }

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL?.trim() || '';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
@@ -27,7 +29,7 @@ api.interceptors.response.use(
 
         // 🛠 Use plain axios here instead of api to avoid interceptor
         const refreshResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
+          `${API_BASE_URL}/auth/refresh-token`,
           { withCredentials: true }
         );
 

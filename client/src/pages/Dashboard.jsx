@@ -39,27 +39,27 @@ function Dashboard() {
 
   return (
     <motion.div
-      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 p-3 sm:p-6"
+      className="flex-1 min-h-0 flex flex-col bg-slate-50 dark:bg-slate-900 p-3 sm:p-6 xl:px-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
     >
       <motion.div
-        className="w-full max-w-7xl mx-auto flex-1 min-h-0 flex flex-col"
+        className="w-full max-w-[96rem] mx-auto flex-1 min-h-0 flex flex-col"
         initial={{ y: 4, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 flex-1 min-h-0 flex flex-col gap-6 lg:flex-row lg:gap-8 transition-all duration-300 overflow-hidden">
-          <div className="flex-1 min-h-0 min-w-0 flex flex-col order-2 lg:order-1">
-            <div className="h-[min(42vh,22rem)] sm:h-[min(50vh,26rem)] lg:h-[min(76vh,36rem)] min-h-[220px] w-full">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm rounded-2xl p-3 sm:p-6 xl:p-8 flex-1 min-h-0 flex flex-col gap-6 xl:flex-row xl:gap-10 transition-all duration-300 overflow-hidden">
+          <div className="flex-1 min-h-0 min-w-0 flex flex-col order-2 xl:order-1">
+            <div className="h-[min(44vh,23rem)] sm:h-[min(52vh,28rem)] xl:h-[min(70vh,42rem)] 2xl:h-[min(72vh,46rem)] min-h-[240px] w-full">
               <Suspense fallback={<ChartFallback />}>
                 <TasksOverTimeChart tasks={tasks} />
               </Suspense>
             </div>
           </div>
 
-          <div className="w-full lg:w-[22rem] flex-shrink-0 flex flex-col gap-4 order-1 lg:order-2 min-h-0">
+          <div className="w-full xl:w-[24rem] 2xl:w-[26rem] flex-shrink-0 flex flex-col gap-5 order-1 xl:order-2 min-h-0">
             <TaskStatusCard tasks={tasks} />
             <div className="w-full min-h-0 flex-1 min-h-[200px] overflow-x-auto overflow-y-visible pb-2 scrollbar-hide">
               <Suspense fallback={<ChartFallback />}>
