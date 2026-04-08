@@ -83,7 +83,7 @@ const TaskStatusCard = ({ tasks }) => {
   const getPercent = (count) => Math.round((count / total) * 100);
 
   return (
-    <div className="w-full sm:w-[22rem] rounded-2xl bg-slate-50 dark:bg-slate-900/50 shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-y-4 transition-all hover:shadow-md text-slate-800 dark:text-slate-100">
+    <div className="w-full rounded-2xl bg-slate-50 dark:bg-slate-900/50 shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-y-4 transition-all hover:shadow-md text-slate-800 dark:text-slate-100">
       {/* Header */}
       <div className="flex items-center gap-x-2">
         <TaskIcon className="w-5 h-5 flex-shrink-0" />
@@ -91,7 +91,7 @@ const TaskStatusCard = ({ tasks }) => {
       </div>
 
       {/* Status Section */}
-      <div className="flex justify-between sm:gap-x-2 gap-x-1">
+      <div className="grid grid-cols-3 gap-2">
         {statusConfig.map(({ label, key, color }) => {
           const count = getCount(key);
           const percent = getPercent(count);
@@ -99,7 +99,7 @@ const TaskStatusCard = ({ tasks }) => {
           return (
             <div
               key={key}
-              className="flex flex-col items-center gap-y-2 group hover:scale-105 transition-all"
+              className="flex flex-col items-center gap-y-2 group hover:scale-105 transition-all min-w-0"
             >
               <CircleChart percent={percent} color={color} />
               <div className="flex items-center gap-1">

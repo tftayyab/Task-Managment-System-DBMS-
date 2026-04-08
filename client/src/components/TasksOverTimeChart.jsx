@@ -17,7 +17,7 @@ const formatDateKey = (dateStr) => new Date(dateStr).toISOString().split('T')[0]
 const formatLabel = (dateStr) =>
   new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
-const TasksOverTimeChart = ({ tasks }) => {
+const TasksOverTimeChart = ({ tasks, fillHeight = false }) => {
   const isDark = document.documentElement.classList.contains('dark');
   const chartData = useMemo(() => {
     const createdMap = {}, completedMap = {}, inProgressMap = {};
@@ -146,7 +146,9 @@ const TasksOverTimeChart = ({ tasks }) => {
 
   return (
     <div className="w-full rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 shadow-sm p-4 h-full transition-all hover:shadow-md">
-      <Line data={chartData} options={options} />
+      <div className={`w-full relative ${fillHeight ? 'h-full' : 'aspect-[16/9]'}`}>
+        <Line data={chartData} options={options} />
+      </div>
     </div>
   );
 };
