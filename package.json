@@ -1,0 +1,43 @@
+{
+  "name": "task-management-system",
+  "version": "1.0.0",
+  "description": "This is a **Task Management System** developed as part of a software development internship assignment. The application allows users to create, update, delete, and manage tasks with advanced features like authentication, search, filters, and progress tracking.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed:demo": "node seed-demo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tftayyab/Task-Management-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tftayyab/Task-Management-System/issues"
+  },
+  "homepage": "https://github.com/tftayyab/Task-Management-System#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "mysql2": "^3.20.0",
+    "react-helmet": "^6.1.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10"
+  }
+}

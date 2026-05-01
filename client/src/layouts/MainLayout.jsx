@@ -1,0 +1,92 @@
+import { useState, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
+import Menu from '../components/Menu';
+import Notification from '../components/notification';
+import useSocketNotifications from '../hooks/useSocketNotifications';
+function MainLayout() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const location = useLocation();
+  const path = location.pathname;
+  const navigate = useNavigate();
+  useSocketNotifications(setNotification);
+
+  useEffect(() => {
+    if (path !== '/collaborate' && searchTerm.trim().length > 0) {
+      navigate('/mytasks');
+    }
+  }, [searchTerm, path, navigate]);
+
+  useEffect(() => {
+    if (!location.pathname.startsWith('/mytasks')) {
+      setSearchTerm('');
+    }
+  }, [location]);
+
+  const shouldShowHeader = !['/', '/login', '/register'].includes(path);
+
+  const getTitles = (pathname) => {
+    if (pathname.startsWith('/dashboard')) return { red: 'Dash', black: 'Board' };
+    if (pathname.startsWith('/mytasks')) return { red: 'My', black: 'Tasks' };
+    if (pathname.startsWith('/viewtask')) return { red: 'View', black: 'Task' };
+    if (pathname.startsWith('/viewteamtask')) return { red: 'Team', black: 'Task' };
+    if (pathname.startsWith('/collaborate')) return { red: 'Collab', black: 'orate' };
+    return { red: '', black: '' };
+  };
+
+  const { red, black } = getTitles(path);
+
+  return (
+    <div
+      className={`flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 ${
+        shouldShowHeader
+          ? 'h-[100dvh] max-h-[100dvh] min-h-0 overflow-hidden'
+          : 'min-h-screen min-h-[100dvh]'
+      }`}
+    >
+      {notification && (
+        <Notification message={notification} onClose={() => setNotification(null)} />
+      )}
+
+      {shouldShowHeader && (
+        <aside className="hidden sm:flex fixed left-0 top-0 h-full w-64 z-40">
+          <Menu />
+        </aside>
+      )}
+
+      <div className={`flex flex-col flex-1 min-h-0 overflow-hidden ${shouldShowHeader ? 'sm:ml-64' : ''}`}>
+        {shouldShowHeader && (
+          <PageHeader
+            redTitle={red}
+            blackTitle={black}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
+        )}
+
+        <main
+          className={`flex-1 min-h-0 w-full overflow-x-hidden flex flex-col ${
+            shouldShowHeader ? 'overflow-y-hidden' : 'overflow-y-auto'
+          }`}
+        >
+          <Outlet
+            context={{
+              searchTerm,
+              setSearchTerm,
+              setNotification,
+              isMenuOpen,
+              setIsMenuOpen,
+            }}
+          />
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default MainLayout;

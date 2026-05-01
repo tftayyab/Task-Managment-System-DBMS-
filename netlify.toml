@@ -1,0 +1,20 @@
+# Matches Netlify UI: Base directory = client, build = npm run build, output = client/dist.
+# SPA fallback fixes missing CSS/JS after reload on client routes (e.g. /dashboard).
+
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
