@@ -54,11 +54,7 @@ export const handleEnhanceField = async ({
     const improved = field === 'title' ? result?.enhancedTitle : result?.enhancedDescription;
 
     if (improved && typeof improved === 'string') {
-      if (field === 'description' && improved.length > 800) {
-        setNewTask((prev) => ({ ...prev, [field]: improved }));
-      } else {
-        animateTyping(improved, field, setNewTask, field === 'description' ? 8 : 12);
-      }
+      animateTyping(improved, field, setNewTask, field === 'description' ? 8 : 12);
       setShowReload((prev) => ({ ...prev, [field]: true }));
       if (setNotification) {
         setNotification(`${field === 'title' ? 'Title' : 'Description'} enhanced with AI`);
